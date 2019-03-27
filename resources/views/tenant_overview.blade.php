@@ -56,7 +56,7 @@ var data = [{
             'rgba(255, 140, 0, 1)',
             'rgba(60,179,113,1)']
     },
-    labels: ['', '2.5-3.49', '1.5-2.49', '1-1.49'],
+    labels: ['', '70-85', '21-69', '0-20'],
     hoverinfo: 'label',
     hole: .5,
     type: 'pie',
@@ -131,7 +131,7 @@ Plotly.newPlot('myDiv', data, layout, { responsive: true });
                         </div>
 
                         <h2 class="name">
-                            <bold>79 </bold></i><i class="fa fa-male"></i>
+                            <strong>{{ $latest['numPeopleDetected'] }} </strong></i><i class="fa fa-male"></i>
                         </h2>
                         <p>@ HubQuaters</p>
 
@@ -139,8 +139,8 @@ Plotly.newPlot('myDiv', data, layout, { responsive: true });
 
                         <div class="flex">
                             <ul class="list-inline count2">
-                                <h3>12:00:34 PM</h3>
-                                <span>19 May 2019</span>
+                                <h3>{{ date('h:i:s a') }}</h3>
+                                <span>{{ date('d F Y') }}</span>
                             </ul>
                         </div>
 
