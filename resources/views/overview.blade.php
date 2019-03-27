@@ -12,7 +12,9 @@
 
 @section('custom-js')
 <!-- Monthly Forecast Chart -->
+
 <script type="text/javascript">
+$(function () {
     var chartData1 = [];
     var chartData2 = [];
     var chartData3 = [];
@@ -193,6 +195,7 @@
             enabled: true
         }
     });
+});
 </script>
 @endsection
 

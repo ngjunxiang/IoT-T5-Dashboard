@@ -10,11 +10,6 @@
 <div class="page-title">
     <h3>Scape HubQuaters Dashboard </h3>
 </div>
-@if (session('status'))
-    <div class="alert alert-success" role="alert">
-        {{ session('status') }}
-    </div>
-@endif
 <div class="clearfix"></div>
 <div class="">
 

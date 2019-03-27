@@ -35,7 +35,7 @@
         media="all" />
 
     @section('custom-css')
-    @endsection
+    @show
 </head>
 
 <body class="nav-md">
@@ -175,6 +175,6 @@
 <script src="{{ asset('js/custom.min.js') }}"></script>
 
 @section('custom-js')
-@endsection
+@show
 
 </html>
