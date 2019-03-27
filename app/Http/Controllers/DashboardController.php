@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class DashboardController extends Controller
 {
@@ -23,7 +23,12 @@ class DashboardController extends Controller
         $liveImages = $this->getLiveImages();
         $latest = end($liveImages);
         $data = ['latest' => $latest];
-        return view('overview')->with($data);
+        if (Auth::user()->hasRole('manager')) {
+            return view('manager_overview')->with($data);
+        } else {
+            return view('tenant_overview')->with($data);
+        }
+
     }
 
     public function records(Request $request)

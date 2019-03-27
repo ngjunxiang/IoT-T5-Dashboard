@@ -33,6 +33,9 @@
     <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css') }}" type="text/css"
         media="all" />
+        {{-- Plotly --}}
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
 
     @section('custom-css')
     @show
@@ -66,8 +69,10 @@
                             <ul class="nav side-menu">
                                 <li><a href="{{ route('index') }}"><i class="fa fa-home"></i> Dashboard </a>
                                 </li>
+                                @if (Auth::user()->hasRole('manager'))
                                 <li><a href="{{ route('records') }}"><i class="fa fa-edit"></i> Data Table</a>
                                 </li>
+                                @endif
                             </ul>
                             <h3 style="margin-top: 40px;">Others</h3>
                             <ul class="nav side-menu">
@@ -97,6 +102,14 @@
                         <div class="nav toggle">
                             <a id="menu_toggle"><i class="fa fa-bars"></i></a>
                         </div>
+                        @if (Auth::user()->hasRole('tenant'))
+                        <ul class="nav navbar-nav navbar-right">
+                            <li role="presentation" class="dropdown">
+                                <button class='btn btn-success pushme-with-color'>NO SEAT</button>
+
+                            </li>
+                        </ul>
+                        @endif
                     </nav>
                 </div>
             </div>
