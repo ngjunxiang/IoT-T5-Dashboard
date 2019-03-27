@@ -1,9 +1,13 @@
 @extends('layouts.app')
 
-@section('custom-css')
-@endsection
-
 @section('custom-js')
+<script type="text/javascript">
+  $(function () {
+      $('#records').DataTable({
+          "order": [[ 0, "desc" ]]
+      });
+  });
+  </script>
 @endsection
 
 @section('content')
@@ -40,9 +44,10 @@
               </div>
               <div class="x_content">
 
-                <table id="datatable" class="table table-striped table-bordered">
+                <table id="records" class="table table-striped table-bordered">
                   <thead>
                     <tr>
+                      <th class="hidden">Timestamp</th>
                       <th>Date</th>
                       <th>Time Range (5 Min Intervals)</th>
                       <th>No. of People</th>
@@ -53,13 +58,20 @@
 
 
                   <tbody>
-                    <tr>
-                      <td>07/03/2019</td>
-                      <td>12:30:00 - 12:35:00</td>
-                      <td>40</td>
-                    </tr>
-
-
+                      @foreach ($liveImages as $index => $liveImage) 
+                      <tr>
+                          <td class="hidden">{{ $liveImage['created_at'] }}</td>
+                          <td>{{ date('d F Y', strtotime($liveImage['created_at'])) }}</td>
+                          <td>
+                            @if (isset($liveImages[$index - 1]))
+                            {{ date('h:i:s A', round(strtotime($liveImages[$index - 1]['created_at'])/60)*60) }} -
+                            @endif
+                            {{ date('h:i:s A', round(strtotime($liveImage['created_at'])/60)*60) }}
+                          </td>
+                          <td>{{ $liveImage['numPeopleDetected'] }}</td>
+                          <td>{{ number_format($liveImage['numPeopleDetected']/env('MAX_OCCUPANCY')*100) }}%</td>
+                      </tr>
+                      @endforeach
                   </tbody>
                 </table>
               </div>

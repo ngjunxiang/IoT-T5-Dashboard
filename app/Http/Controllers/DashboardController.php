@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class DashboardController extends Controller
 {
@@ -19,13 +21,17 @@ class DashboardController extends Controller
     public function overview()
     {
         $liveImages = $this->getLiveImages();
-        return view('overview');
+        $latest = end($liveImages);
+        $data = ['latest' => $latest];
+        return view('overview')->with($data);
     }
 
-    public function records()
+    public function records(Request $request)
     {
         $liveImages = $this->getLiveImages();
-        return view('records');
+
+        $data = ['liveImages' => $liveImages];
+        return view('records')->with($data);
     }
 
     public function getLiveImages()

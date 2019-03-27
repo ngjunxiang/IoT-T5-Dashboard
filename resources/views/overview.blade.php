@@ -215,16 +215,16 @@ $(function () {
     <div class="animated flipInY col-lg-4 col-md-3 col-sm-6 col-xs-12">
         <div class="tile-stats">
             <div class="icon"><i class="fa fa-clock-o"></i></div>
-            <div class="count">12:00:34</div>
-            <h3>19 May 2019</h3>
+            <div class="count">{{ date('h:i:s a') }}</div>
+            <h3>{{ date('d F Y') }}</h3>
             <p>Present Date-Time</p>
         </div>
     </div>
     <div class="animated flipInY col-lg-4 col-md-3 col-sm-6 col-xs-12">
         <div class="tile-stats">
             <div class="icon"><i class="fa fa-male"></i></div>
-            <div class="count">79</div>
-            <h3>Occupancy: 98%</h3>
+            <div class="count">{{ $latest['numPeopleDetected'] }}</div>
+            <h3>Occupancy: {{ number_format($latest['numPeopleDetected']/env('MAX_OCCUPANCY')*100) }}%</h3>
             <p>Real-Time No. Of Customers</p>
         </div>
     </div>
