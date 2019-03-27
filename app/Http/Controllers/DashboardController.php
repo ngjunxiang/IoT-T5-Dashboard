@@ -9,8 +9,7 @@ class DashboardController extends Controller
     public function index()
     {
         $liveImages = $this->getLiveImages();
-        dd($liveImages);
-        // return view('welcome');
+        return view('home');
     }
 
     public function getLiveImages()
