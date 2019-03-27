@@ -13,8 +13,19 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        return redirect()->route('overview');
+    }
+
+    public function overview()
+    {
         $liveImages = $this->getLiveImages();
-        return view('home');
+        return view('overview');
+    }
+
+    public function records()
+    {
+        $liveImages = $this->getLiveImages();
+        return view('records');
     }
 
     public function getLiveImages()

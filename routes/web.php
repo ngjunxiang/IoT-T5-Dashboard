@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
  */
+// Default Setting
+Route::get('/', 'DashboardController@index')->name('index');
+
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -23,5 +26,6 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
 Route::group(['middleware' => ['roles', 'auth'], 'roles' => ['tenant', 'manager']], function () {
-    Route::get('/', 'DashboardController@index')->name('index');
+    Route::get('/overview', 'DashboardController@overview')->name('overview');
+    Route::get('/records', 'DashboardController@records')->name('records');
 });
