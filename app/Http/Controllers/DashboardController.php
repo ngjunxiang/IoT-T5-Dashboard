@@ -6,6 +6,11 @@ use GuzzleHttp\Client;
 
 class DashboardController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
     public function index()
     {
         $liveImages = $this->getLiveImages();

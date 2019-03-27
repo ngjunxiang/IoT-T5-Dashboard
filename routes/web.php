@@ -11,8 +11,7 @@
 |
  */
 
-
 Auth::routes();
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['roles', 'auth'], 'roles' => ['tenant']], function () {
     Route::get('/', 'DashboardController@index')->name('index');
 });
