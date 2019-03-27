@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -13,8 +15,28 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        return redirect()->route('overview');
+    }
+
+    public function overview()
+    {
         $liveImages = $this->getLiveImages();
-        return view('home');
+        $latest = end($liveImages);
+        $data = ['latest' => $latest];
+        if (Auth::user()->hasRole('manager')) {
+            return view('manager_overview')->with($data);
+        } else {
+            return view('tenant_overview')->with($data);
+        }
+
+    }
+
+    public function records(Request $request)
+    {
+        $liveImages = $this->getLiveImages();
+
+        $data = ['liveImages' => $liveImages];
+        return view('records')->with($data);
     }
 
     public function getLiveImages()
