@@ -702,7 +702,7 @@ if (typeof NProgress != 'undefined') {
 						"IOS"
 					],
 					datasets: [{
-						data: [15, 20, 30, 10, 30],
+						data: [50, 20, 10, 10, 10],
 						backgroundColor: [
 							"#BDC3C7",
 							"#9B59B6",
@@ -3182,9 +3182,8 @@ if (typeof NProgress != 'undefined') {
 				  }
 				},
 				series: [{
-				  name: 'Performance',
+				  name: 'Test',
 				  type: 'gauge',
-				  center: ['50%', '50%'],
 				  startAngle: 140,
 				  endAngle: -140,
 				  min: 0,
@@ -3268,8 +3267,8 @@ if (typeof NProgress != 'undefined') {
 					}
 				  },
 				  data: [{
-					value: 50,
-					name: 'Performance'
+					value: currNumPpl/85,
+					name: 'Test'
 				  }]
 				}]
 			  });

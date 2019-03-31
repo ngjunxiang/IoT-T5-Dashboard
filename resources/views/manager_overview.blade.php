@@ -12,8 +12,282 @@
 
 @section('custom-js')
 <!-- Monthly Forecast Chart -->
-
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
+var currNumPpl = 0;
+google.charts.load('current', {'packages':['corechart']});
+$(document).ready(function(){
+    var WeekUrl = "http://3.1.241.179/api/liveimage?order=desc&aggregate=week";
+    $.ajax ({
+        url: WeekUrl,
+        datatype: "json",
+        success: function (e) {
+            var data = e["images"];
+            //plotMonthlyGraph(data);
+            peakhours(data);
+        }
+    });
+    var MonthUrl = "http://3.1.241.179/api/liveimage?order=desc&aggregate=month";
+    $.ajax ({
+        url: MonthUrl,
+        datatype: "json",
+        success: function (e) {
+            var data = e["images"];
+            MonthlyOccupancy(data);
+        }
+
+    });
+    var WeekUrlAsc = "http://3.1.241.179/api/liveimage?order=asc&aggregate=week";
+    $.ajax ({
+        url: WeekUrlAsc,
+        datatype: "json",
+        success: function (e) {
+            var data = e["images"];
+            plotMonthlyGraph(data);
+            //peakhours(data);
+        }
+    });
+});
+function plotMonthlyGraph(data){
+    var totalOcc = 0; 
+    var avgOcc= 0;
+    var counter = 0 ;  
+    var week = [];
+    for(var k in data) {
+        var DataArray = data[k];
+        for (var i in DataArray)
+        {
+            obj = DataArray[i]
+            numPpl = obj["numPeopleDetected"];
+            if(numPpl> 0){
+                if( k ==0 )
+                    totalOcc = numPpl;
+                totalOcc += numPpl;
+                counter+=1;
+            }
+        
+        }
+        avgOcc = Math.round(totalOcc/counter);
+        string = "Week "+k.split("-")[0]+","+avgOcc+","+Math.round(avgOcc/85*100);
+        week.push(string);
+    }
+    //figure out how to feed data in 
+    var data = google.visualization.arrayToDataTable([
+            ['Week', 'Forcast', 'Present'],
+            ['Week 0',  0,      0]
+        ]);
+        for(var i in week)
+        {
+            array = week[i].split(",");
+            console.log(array);
+            data.addRow([array[0],parseInt(array[1]),parseInt(array[2])]);
+
+        }
+       
+        var options = {
+            title: '',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+}
+
+function peakhours(data){
+    var result =[]; 
+    var rawData ="";
+    var counter = 0 ;
+    var mon = []; 
+    var tue = []; 
+    var wed = [];
+    var thu = []; 
+    var fri = []; 
+    var sat = []; 
+    var sun = [];
+    var count = [];  
+    for(var k in data) {
+        if (counter == 1)
+        {
+            rawData = data[k];
+            break;
+        }
+        counter ++; 
+    };
+   for(var i in rawData){
+       var dt = new Date(rawData[i]["created_at"]);
+       var day = dt.getDay();
+       var hour = dt.getHours(); 
+       var numPpl = rawData[i]["numPeopleDetected"];
+       if(day == 1)
+       {
+           if(mon[hour]== null ){
+                mon[hour] = numPpl;
+           }
+           else {
+                var value = mon[hour];
+                mon[hour] = value + numPpl;  
+           }
+             
+       }
+       else if (day == 2 )
+       {
+            if(tue[hour]== null ){
+                tue[hour] = numPpl;
+            }
+            else {
+                var value = tue[hour];
+                tue[hour] = value + numPpl;  
+            }
+       }
+       else if (day == 3 )
+       {
+            if(wed[hour]== null ){
+                wed[hour] = numPpl;
+            }
+            else {
+                var value = wed[hour];
+                wed[hour] = value + numPpl;  
+            }
+       }
+       else if (day == 4 )
+       {
+            if(thu[hour]== null ){
+                thu[hour] = numPpl;
+            }
+            else {
+                var value = thu[hour];
+                thu[hour] = value + numPpl;  
+            }
+       }
+       else if (day == 5 )
+       {
+            if(fri[hour]== null ){
+                fri[hour] = numPpl;
+            }
+            else {
+                var value = fri[hour];
+                fri[hour] = value + numPpl;  
+            }
+       }
+       else if (day == 6 )
+       {
+            if(sat[hour]== null ){
+                sat[hour] = numPpl;
+            }
+            else {
+                var value = sat[hour];
+                sat[hour] = value + numPpl;  
+            }
+       }
+       else 
+       {
+            if(sun[hour]== null ){
+                sun[hour] = numPpl;
+            }
+            else {
+                var value = sun[hour];
+                sun[hour] = value + numPpl;  
+            }
+       }
+         if(count[day]== null)
+            count[day] = 0; 
+        if(numPpl >0 )
+            count[day]++; 
+
+   }
+   addToList(mon,"Monday",count,1,result);
+   addToList(tue,"Tuesday",count,2,result);
+   addToList(wed,"Wednesday",count,3,result);
+   addToList(thu,"Thursday",count,4,result);
+   addToList(fri,"Friday",count,5,result);
+   addToList(sat,"Saturaday",count,6,result);
+   addToList(sun,"Sunday",count,0,result);
+   var output="";
+   for(var i in result)
+   {
+       var arry = result[i].split(",");
+       output += "<tr>"
+       output += "  <th scope=\"row\">"+(parseInt(i)+1)+"</th>"
+       output += "      <td>"+arry[0]+"</td>"
+       output += "      <td>"+arry[1]+" </td>"
+       output += "      <td>"+arry[2]+"</td>"
+       output += "      <td>"+arry[3]+"</td>"
+       output += "      </tr>"
+
+   } 
+   $("#peakhours").empty(); 
+   $("#peakhours").append(output); 
+}
+function addToList (array, day,count,index,result)
+{
+    for(var i in array)
+    {
+        avg = getAvg(array[i],count[index]);
+        occupancyRate = checker(avg)
+        // change to 10 when is done.
+        if(occupancyRate>10)
+        {
+            nextHr = parseInt(i) + 1; 
+            string = day+"," + i+":00-"+nextHr+":00,"+avg+","+occupancyRate;
+            result.push(string);
+        }
+                
+    }
+}
+function checker(avg)
+{
+    return Math.round(avg/85* 100) ; 
+}
+function getAvg (numPpl,count)
+{
+    return Math.round(numPpl/12);
+}
+
+function MonthlyOccupancy(data)
+{
+    var totalOcc = 0; 
+    var avgOcc= 0;
+    var counter = 0 ;  
+    var month = [];
+    for(var k in data) {
+        //month.push(k);
+        var DataArray = data[k];
+        for (var i in DataArray)
+        {
+            obj = DataArray[i]
+            numPpl = obj["numPeopleDetected"];
+            if(numPpl> 0){
+                if( k ==0 )
+                    totalOcc = numPpl;
+                totalOcc += numPpl;
+                counter+=1;
+            }
+        
+        }
+        avgOcc = Math.round(totalOcc/counter);
+        string = k.split("-")[0]+","+avgOcc+","+Math.round(avgOcc/85*100);
+        month.push(string);
+        counter = 0 ; 
+        totalOcc= 0;
+
+    }
+    var output = "";
+    for(var i in month){
+        array = month[i].split(",");
+        output+="<tr>";
+        output+="   <th scope=\"row\">"+(parseInt(i+1))+"</th>";
+        output+="   <td>"+array[0]+"</td>";
+        output+="   <td>"+array[1]+"</td>";
+        output+="   <td>"+array[2]+"</td>";
+        output+="</tr>";
+    }
+    $("#monthlyOcc").empty();
+    $("#monthlyOcc").append(output);
+    //
+}
+
 $(function () {
     var chartData1 = [];
     var chartData2 = [];
@@ -46,12 +320,6 @@ $(function () {
             a2 += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
             b2 += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
 
-            a3 += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-            b3 += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-
-            a4 += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-            b4 += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-
             chartData1.push({
                 date: newDate,
                 value: a1,
@@ -62,16 +330,7 @@ $(function () {
                 value: a2,
                 volume: b2 + 1500
             });
-            chartData3.push({
-                date: newDate,
-                value: a3,
-                volume: b3 + 1500
-            });
-            chartData4.push({
-                date: newDate,
-                value: a4,
-                volume: b4 + 1500
-            });
+          
         }
     }
 
@@ -196,6 +455,66 @@ $(function () {
         }
     });
 });
+
+// Running clock 
+var myClock = document.getElementById("clock");
+function renderTime () {
+    var d = new Date();
+    utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    currentTime = new Date(utc + (3600000*8));
+    var h = currentTime.getHours();
+    var m = currentTime.getMinutes();
+    var s = currentTime.getSeconds();
+
+    if (h < 10) {
+        h = "0" + h;
+    }
+
+
+    if (m < 10) {
+        m = "0" + m;
+    }
+
+
+    if (s < 10) {
+        s = "0" + s;
+    }
+
+    //myClock.textContent = h + ":" + m + ":" + s;
+    myClock.innerText = h + ":" + m + ":" + s;
+
+    setTimeout(renderTime, 1000);
+}
+renderTime();
+
+// google charts
+//google.charts.load('current', {'packages':['corechart']});
+//google.charts.setOnLoadCallback(drawChart);
+
+/*function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+        ['Year', 'Forcast', 'Present'],
+        ['2004',  1000,      400],
+        ['2005',  1170,      460],
+        ['2006',  660,       1120],
+        ['2007',  1030,      540]
+    ]);
+    data.addRow(['2019',500,400]);
+    var options = {
+        title: '',
+        curveType: 'function',
+        legend: { position: 'bottom' }
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+    chart.draw(data, options);
+}*/
+
+
+
+
+
 </script>
 @endsection
 
@@ -215,7 +534,7 @@ $(function () {
     <div class="animated flipInY col-lg-4 col-md-3 col-sm-6 col-xs-12">
         <div class="tile-stats">
             <div class="icon"><i class="fa fa-clock-o"></i></div>
-            <div class="count">{{ date('h:i:s a') }}</div>
+            <div class="count"id="clock">{{ date('H:i:s') }}</div>
             <h3>{{ date('d F Y') }}</h3>
             <p>Present Date-Time</p>
         </div>
@@ -233,7 +552,7 @@ $(function () {
         <div class="tile-stats">
             <div class="icon"><i class="fa fa-users"></i></div>
             <div class="count">80</div>
-            <h3>Max Sign-Up: 85</h3>
+            <h3>Max Sign-Up: {{env('MAX_OCCUPANCY')}}</h3>
             <p>Present Customer Sign-Ups</p>
         </div>
     </div>
@@ -281,7 +600,7 @@ $(function () {
                         <div class="col-xs-8">
                             <div class="progress progress_sm">
                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="89"
-                                    style="width: 89%;" aria-valuenow="87">
+                                    style="width:0%;" aria-valuenow="87">
                                 </div>
                             </div>
                         </div>
@@ -296,7 +615,7 @@ $(function () {
                         <div class="col-xs-8">
                             <div class="progress progress_sm">
                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="79"
-                                    style="width: 79%;" aria-valuenow="77">
+                                    style="width:0%;" aria-valuenow="77">
                                 </div>
                             </div>
                         </div>
@@ -311,7 +630,7 @@ $(function () {
                         <div class="col-xs-8">
                             <div class="progress progress_sm">
                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="69"
-                                    style="width: 69%;" aria-valuenow="67">
+                                    style="width:0%;" aria-valuenow="67">
                                 </div>
                             </div>
                         </div>
@@ -326,7 +645,7 @@ $(function () {
                         <div class="col-xs-8">
                             <div class="progress progress_sm">
                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="79"
-                                    style="width: 79%;" aria-valuenow="77">
+                                    style="width:0%;" aria-valuenow="77">
                                 </div>
                             </div>
                         </div>
@@ -342,7 +661,7 @@ $(function () {
                         <div class="col-xs-8">
                             <div class="progress progress_sm">
                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="69"
-                                    style="width: 69%;" aria-valuenow="67">
+                                    style="width: 0%;" aria-valuenow="67">
                                 </div>
                             </div>
                         </div>
@@ -394,7 +713,7 @@ $(function () {
                                     <td>
                                         <p><i class="fa fa-square blue"></i>Monday</p>
                                     </td>
-                                    <td>30%</td>
+                                    <td>20%</td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -459,15 +778,7 @@ $(function () {
                             <th>Occupancy Rate(%)</th>
                         </tr>
                     </thead>
-                    <tbody>
-
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Monday</td>
-                            <td>12:00 - 13:00 </td>
-                            <td>78</td>
-                            <td>95</td>
-                        </tr>
+                    <tbody id="peakhours">
                     </tbody>
                 </table>
 
@@ -500,14 +811,7 @@ $(function () {
                             <th>Average Occupancy Rate(%)</th>
                         </tr>
                     </thead>
-                    <tbody>
-
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Feb</td>
-                            <td>50</td>
-                            <td>44.5</td>
-                        </tr>
+                    <tbody id="monthlyOcc">
                     </tbody>
                 </table>
 
@@ -531,11 +835,17 @@ $(function () {
 
                 </div>
             </div>
-
-            <div id="chartdiv"></div>
+            <div class="col-md-3">
+                <h3>Filter</h3>
+            </div>
+            <div class="col-md-9">
+                <div id="curve_chart" style="width: 900px; height: 500px"></div>
+            </div>
+            
         </div>
     </div>
 
 </div>
+
 <!--------------------------- Fourth Tier (History plus Forecast) --------------------->
 @endsection
