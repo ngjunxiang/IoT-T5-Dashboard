@@ -76,6 +76,10 @@
                             </ul>
                             <h3 style="margin-top: 40px;">Others</h3>
                             <ul class="nav side-menu">
+                                @if (Auth::user()->hasRole('manager'))
+                                <li><a href="https://scapesg.gitbook.io/hubquarters" target="_blank"><i class="fa fa-file"></i> Documentation</a>
+                                </li>
+                                @endif
                                 <li>
                                     <a href="{{ route('logout') }}"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
