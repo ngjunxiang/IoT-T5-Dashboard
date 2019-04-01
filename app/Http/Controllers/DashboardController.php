@@ -22,8 +22,9 @@ class DashboardController extends Controller
     {
         $liveImages = $this->getLiveImages();
         $latest = end($liveImages);
-        $weeklyBreakDown = $this->getDaily();
-        $data = ['latest' => $latest, 'weeklyBreakdown'=>$weeklyBreakDown];
+        //$this->PredictWeekly();
+       // $weeklyBreakDown = $this->getDaily();
+        $data = ['latest' => $latest];
         if (Auth::user()->hasRole('manager')) {
             return view('manager_overview')->with($data);
         } else {
@@ -52,6 +53,36 @@ class DashboardController extends Controller
         }
 
         return null;
+    }
+
+    public function PredictWeekly()
+    {
+        $client = new Client();
+        $weeklyData = []; 
+        $week =[];
+        $timePeriod = 100;
+        $response = $client->get(env('API_HOST') . '/api/liveimage?order=desc&aggregate=week');
+        if ($response->getStatusCode() === 200) {
+            $decodedResponse = json_decode($response->getBody()->getContents(), true);
+            if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {
+                $decodedArray =  $decodedResponse['images'];
+                foreach ($decodedArray as $key => $value) {
+                   array_push($week,$key);
+                    $rawData = $decodedArray [$key];
+                    $total = 0 ; 
+                    $counter = 0;
+                    foreach ($rawData as $record => $value1 ){
+                        $total =$total+$value1["numPeopleDetected"];
+                        $counter ++;
+                    }
+                    array_push($weeklyData,($total/$counter));
+                    $total = 0; 
+                    $counter=0;
+                }
+            }
+           $result = trader_sma( $weeklyData , $timePeriod );
+           echo $result;
+        }
     }
     public function getDaily()
     {
