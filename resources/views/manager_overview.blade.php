@@ -17,14 +17,13 @@
 var currNumPpl = 0;
 google.charts.load('current', {'packages':['corechart']});
 $(document).ready(function(){
-    predict();
     var WeekUrl = "http://3.1.241.179/api/liveimage?order=desc&aggregate=week";
     $.ajax ({
         url: WeekUrl,
         datatype: "json",
         success: function (e) {
             var data = e["images"];
-            //plotMonthlyGraph(data);
+            //plotGraph(data,"month");
             peakhours(data);
             plotDoughnutChart(data);
         }
@@ -45,16 +44,18 @@ $(document).ready(function(){
         datatype: "json",
         success: function (e) {
             var data = e["images"];
-           // plotMonthlyGraph(data);
+            plotGraph(data,"week");
             //peakhours(data);
         }
     });
 });
-function plotGraph(data){
+function plotGraph(data,type){
     var totalOcc = 0; 
     var avgOcc= 0;
     var counter = 0 ;  
-    var week = [];
+    var x_axis = [];
+    var Rawdata=[];
+    var result= [];
     for(var k in data) {
         var DataArray = data[k];
         for (var i in DataArray)
@@ -64,55 +65,84 @@ function plotGraph(data){
             if(numPpl> 0){
                 if( k ==0 )
                     totalOcc = numPpl;
-                totalOcc += numPpl;
+                else
+                    totalOcc += numPpl;
                 counter+=1;
             }
         
         }
         avgOcc = Math.round(totalOcc/counter);
-        string = "Week "+k.split("-")[0]+","+avgOcc+","+Math.round(avgOcc/85*100);
-        week.push(string);
+        if(type== "week")
+            string = type+" "+k.split("-")[0]+","+avgOcc+","+Math.round(avgOcc/85*100);
+        else 
+            string = k.split("-")[0]+","+avgOcc+","+Math.round(avgOcc/85*100);
+        result.push(string);
+        x_axis.push(k.split("-")[0]);
+        Rawdata.push(avgOcc);
+        
     }
-    //figure out how to feed data in 
-    var data = google.visualization.arrayToDataTable([
-            ['Week', 'Forcast', 'Present'],
-            ['Week 0',  0,      0]
-        ]);
-        for(var i in week)
-        {
-            array = week[i].split(",");
-            //console.log(array);
-            data.addRow([array[0],parseInt(array[1]),parseInt(array[2])]);
-
-        }
-       
-        var options = {
-            title: '',
-            curveType: 'function',
-            legend: { position: 'bottom' }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-        chart.draw(data, options);
+    console.log(Rawdata);
+    var predictedData = predict(Rawdata,result,type);
+    console.log(predictedData);
+    //figure out how to feed data in
+    
 }
-function predict(){
-    var data = [1,2,3,4,5,6,2,3,1,5,12,7,3,2];
-    var json = {"data":data};
-    var jsonObj = JSON.stringify(json);
-    console.log(jsonObj);
+function predict(Rawdata,result,type){
     $.ajax ({
         type: "POST",
-        url: "http://159.89.204.164:8081/predict",
+        url: "http://159.89.204.164:8081/predictGraph",
         datatype: "application/json",
+        contentType:"application/json",
         data: JSON.stringify({ 
-            'data': data
+            'data': Rawdata
             }),
         success: function (e) {
-            var data = e;
-            console.log(e);
-            //plotMonthlyGraph(data);
-            //peakhours(data);
+            var json = JSON.parse(e)
+            var jsonResult = json["data"];
+            //return json["data"];
+            var data = ""; 
+            if(type =="week"){
+                data = google.visualization.arrayToDataTable([
+                    ['Week', 'Forcast', 'Present'],
+                    ['Week 12',  6,      4]
+                ]);
+                for(var i in result)
+                {
+                    if(i==0)
+                        continue;
+                    array = result[i].split(",");
+                    //console.log(array);
+                    data.addRow([array[0],parseInt(Rawdata[i]),parseInt(jsonResult[i])]);
+
+                }
+            }else{
+                data = google.visualization.arrayToDataTable([
+                    ['Month', 'Forcast', 'Present'],
+                    ['Mar',  0,      0]
+                ]);
+                for(var i in result)
+                {
+                    array = result[i].split(",");
+                    //console.log(array);
+                    data.addRow([array[0],parseInt(Rawdata[i]),parseInt(jsonResult[i])]);
+
+                }
+            }
+
+            
+                var options = {
+                    title: '',
+                    curveType: 'function',
+                    legend: { position: 'bottom' },
+                    vAxis: {minValue: 0}
+                };
+
+                var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+                chart.draw(data, options);
+
+
+
         }
     });
 }
@@ -312,173 +342,6 @@ function MonthlyOccupancy(data)
     //
 }
 
-$(function () {
-    var chartData1 = [];
-    var chartData2 = [];
-    var chartData3 = [];
-    var chartData4 = [];
-
-    generateChartData();
-
-    function generateChartData() {
-        var firstDate = new Date();
-        firstDate.setDate(firstDate.getDate() - 500);
-        firstDate.setHours(0, 0, 0, 0);
-
-        var a1 = 1500;
-        var b1 = 1500;
-        var a2 = 1700;
-        var b2 = 1700;
-        var a3 = 1600;
-        var b3 = 1600;
-        var a4 = 1400;
-        var b4 = 1400;
-
-        for (var i = 0; i < 500; i++) {
-            var newDate = new Date(firstDate);
-            newDate.setDate(newDate.getDate() + i);
-
-            a1 += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-            b1 += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-
-            a2 += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-            b2 += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-
-            chartData1.push({
-                date: newDate,
-                value: a1,
-                volume: b1 + 1500
-            });
-            chartData2.push({
-                date: newDate,
-                value: a2,
-                volume: b2 + 1500
-            });
-          
-        }
-    }
-
-    var chart = AmCharts.makeChart("chartdiv", {
-        type: "stock",
-        theme: "none",
-        dataSets: [
-            {
-                title: "Avg No. of Customers", //first data set
-                fieldMappings: [
-                    {
-                        fromField: "value",
-                        toField: "value"
-                    },
-                    {
-                        fromField: "volume",
-                        toField: "volume"
-                    }
-                ],
-                dataProvider: chartData1,
-                categoryField: "date"
-            },
-            {
-                title: "Avg Forcasted No. of Customers", //second data set
-                fieldMappings: [
-                    {
-                        fromField: "value",
-                        toField: "value"
-                    },
-                    {
-                        fromField: "volume",
-                        toField: "volume"
-                    }
-                ],
-                dataProvider: chartData2,
-                categoryField: "date"
-            },
-
-        ],
-
-        panels: [
-            {
-                showCategoryAxis: false,
-                title: "Value",
-                percentHeight: 70,
-                stockGraphs: [
-                    {
-                        id: "g1",
-                        valueField: "value",
-                        comparable: true,
-                        compareField: "value",
-                        balloonText: "[[title]]:<b>[[value]]</b>",
-                        compareGraphBalloonText: "[[title]]:<b>[[value]]</b>"
-                    }
-                ],
-                stockLegend: {
-                    periodValueTextComparing: "[[percents.value.close]]%",
-                    periodValueTextRegular: "[[value.close]]"
-                }
-            },
-            {
-                title: "Volume",
-                percentHeight: 30,
-                stockGraphs: [
-                    {
-                        valueField: "volume",
-                        type: "column",
-                        showBalloon: false,
-                        fillAlphas: 1
-                    }
-                ],
-                stockLegend: {
-                    periodValueTextRegular: "[[value.close]]"
-                }
-            }
-        ],
-
-        chartScrollbarSettings: {
-            graph: "g1"
-        },
-
-        chartCursorSettings: {
-            valueBalloonsEnabled: true,
-            fullWidth: true,
-            cursorAlpha: 0.1,
-            valueLineBalloonEnabled: true,
-            valueLineEnabled: true,
-            valueLineAlpha: 0.5
-        },
-
-        periodSelector: {
-            position: "left",
-            periods: [
-                {
-                    period: "MM",
-                    selected: true,
-                    count: 1,
-                    label: "1 month"
-                },
-                {
-                    period: "YYYY",
-                    count: 1,
-                    label: "1 year"
-                },
-                {
-                    period: "YTD",
-                    label: "YTD"
-                },
-                {
-                    period: "MAX",
-                    label: "MAX"
-                }
-            ]
-        },
-
-        dataSetSelector: {
-            position: "left"
-        },
-
-        export: {
-            enabled: true
-        }
-    });
-});
 
 // Running clock 
 var myClock = document.getElementById("clock");
@@ -964,7 +827,7 @@ function myFunc(data) {
     <div class="col-md-4 col-sm-6 col-xs-12 ">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Hourly Occupancy Rate</h2>
+                <h2>Hourly Occupancy Rate Prediction</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>

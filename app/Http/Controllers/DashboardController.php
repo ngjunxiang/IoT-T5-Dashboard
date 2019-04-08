@@ -58,7 +58,8 @@ class DashboardController extends Controller
     public function predictHourly($data)
     {
         $today = date('D');
-        $result = array();
+        $hourlyResult = array("09"=>[],"10"=>[],"09"=>[],"11"=>[],"12"=>[],"13"=>[],"14"=>[],"15"=>[],"16"=>[],"17"=>[],"18"=>[],"19"=>[],"20"=>[],"21"=>[],"22"=>[],"23"=>[],"00"=>[]);
+        $result = $hourlyResult;
         $counter = array();
         foreach ($data as $item) {
             $Rawdate = $item["created_at"];
@@ -67,26 +68,37 @@ class DashboardController extends Controller
             if($day == $today)
             {
                 $hour = date('H', $date);
-                if(!array_key_exists($hour, $result)){
-                    $hourly= array($hour=>$item['numPeopleDetected']);
-                    $newCounter = array($hour=>1);
-                    $result+=$hourly;
-                    $counter+=$newCounter;
-                }
-                else {
-                    $numPpl = $result[$hour];
-                    if($item['numPeopleDetected'] >0)
-                        $counter[$hour] +=1; 
-                    $result[$hour]= $item['numPeopleDetected']+$numPpl;
+                if(array_key_exists($hour, $hourlyResult)){
+                    $hourly = $hourlyResult[$hour];
+                    array_push($hourly,$item['numPeopleDetected']);
+                    $hourlyResult[$hour] = $hourly;
                 }
             }
             
         }
-        foreach($counter as $key=>$value){
-            $result[$key]= round(($result[$key]/$counter[$key])/85*100);
+        //echo json_encode($hourlyResult);
+        foreach ($hourlyResult  as $key => $value)
+        {
+            $result[$key] = round($this->predict($hourlyResult[$key])/85*100);
         }
+        //echo json_encode($result);
         return $result;
-        
+       
+    }
+    function predict($result) {
+
+       
+        $client = new Client([
+            'headers' => [ 'Content-Type' => 'application/json' ]
+        ]);
+        $response = $client->post("http://159.89.204.164:8081/predict",['body' => json_encode(
+            [
+                "data"=>$result
+            ]
+        )]);
+        $data =  $response->getBody();
+        $json =json_decode($data, true);
+        return $json['data'];
     }
    
 }
