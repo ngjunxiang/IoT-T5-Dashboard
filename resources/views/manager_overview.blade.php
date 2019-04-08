@@ -12,11 +12,52 @@
 
 @section('custom-js')
 <!-- Monthly Forecast Chart -->
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
+<script src="{{ URL::asset('js/chart.js') }}"></script>
 <script type="text/javascript">
+var ctx = document.getElementById('myChart').getContext('2d');
+var config = {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [
+            {
+                label: 'Actual', 
+                borderColor: '#2196f3',
+                fill: false,
+                data: []
+            },
+            {
+                label: 'Predicted', 
+                borderColor: '#4CAF50',
+                fill: false,
+                data: []
+            }
+        ]
+    },
+    options: {
+        responsive: true, // Instruct chart js to respond nicely.
+        maintainAspectRatio: false, // Add to prevent default behaviour of full-width/height 
+        scales: {
+            yAxes: [{
+                ticks: {
+                beginAtZero: true,
+                }
+            }]
+        }
+    }
+};
+var myLineChart = new Chart(ctx, config);
+/*
+var myChart = new Chart(ctx, 
+});*/
+
+
+
 var currNumPpl = 0;
-google.charts.load('current', {'packages':['corechart']});
+//google.charts.load('current', {'packages':['corechart']});
 $(document).ready(function(){
+    
     var WeekUrl = "http://3.1.241.179/api/liveimage?order=desc&aggregate=week";
     $.ajax ({
         url: WeekUrl,
@@ -49,6 +90,34 @@ $(document).ready(function(){
         }
     });
 });
+function plotMonth(){
+   
+    var MonthUrl = "http://3.1.241.179/api/liveimage?order=asc&aggregate=month";
+    $.ajax ({
+        url: MonthUrl,
+        datatype: "json",
+        success: function (e) {
+            var data = e["images"];
+            plotGraph(data,"month");
+        }
+
+    });
+}
+function plotWeek(){
+    
+    var WeekUrlAsc = "http://3.1.241.179/api/liveimage?order=asc&aggregate=week";
+    $.ajax ({
+        url: WeekUrlAsc,
+        datatype: "json",
+        success: function (e) {
+            
+            var data = e["images"];
+            plotGraph(data,"week");
+            //peakhours(data);
+        }
+    });
+}
+
 function plotGraph(data,type){
     var totalOcc = 0; 
     var avgOcc= 0;
@@ -72,77 +141,82 @@ function plotGraph(data,type){
         
         }
         avgOcc = Math.round(totalOcc/counter);
-        if(type== "week")
-            string = type+" "+k.split("-")[0]+","+avgOcc+","+Math.round(avgOcc/85*100);
-        else 
-            string = k.split("-")[0]+","+avgOcc+","+Math.round(avgOcc/85*100);
+        string = k.split("-")[0]+","+avgOcc+","+Math.round(avgOcc/85*100);
         result.push(string);
         x_axis.push(k.split("-")[0]);
         Rawdata.push(avgOcc);
         
     }
-    console.log(Rawdata);
     var predictedData = predict(Rawdata,result,type);
-    console.log(predictedData);
     //figure out how to feed data in
     
 }
 function predict(Rawdata,result,type){
     $.ajax ({
         type: "POST",
-        url: "http://159.89.204.164:8081/predictGraph",
+        url: "http://159.89.204.164:8081/predict",
         datatype: "application/json",
         contentType:"application/json",
         data: JSON.stringify({ 
             'data': Rawdata
             }),
         success: function (e) {
+            myLineChart.data.datasets[0] = {
+                    label: 'Actual', 
+                    borderColor: '#2196f3',
+                    fill: false,
+                    data: []
+                };
+            myLineChart.data.datasets[1] = {
+                    label: 'Predicted', 
+                    borderColor: '#4CAF50',
+                    fill: false,
+                    data: []
+                };
+            myLineChart.data.labels =[];
             var json = JSON.parse(e)
             var jsonResult = json["data"];
-            //return json["data"];
-            var data = ""; 
             if(type =="week"){
-                data = google.visualization.arrayToDataTable([
-                    ['Week', 'Forcast', 'Present'],
-                    ['Week 12',  6,      4]
-                ]);
                 for(var i in result)
                 {
-                    if(i==0)
-                        continue;
                     array = result[i].split(",");
-                    //console.log(array);
-                    data.addRow([array[0],parseInt(Rawdata[i]),parseInt(jsonResult[i])]);
+                    myLineChart.data.labels.push("Week "+array[0]);
+                    myLineChart.data.datasets[0].data.push(Rawdata[i]);
+                    myLineChart.data.datasets[1].data.push(Rawdata[i]);
 
                 }
+                myLineChart.data.labels.push("Week "+(parseInt(array[0])+1));
+                myLineChart.data.datasets[1].data.push(jsonResult);
             }else{
-                data = google.visualization.arrayToDataTable([
-                    ['Month', 'Forcast', 'Present'],
-                    ['Mar',  0,      0]
-                ]);
                 for(var i in result)
-                {
+                { 
+                    
                     array = result[i].split(",");
-                    //console.log(array);
-                    data.addRow([array[0],parseInt(Rawdata[i]),parseInt(jsonResult[i])]);
+                    myLineChart.data.labels.push(array[0]);
+                    myLineChart.data.datasets[0].data.push(Rawdata[i]);
+                    myLineChart.data.datasets[1].data.push(Rawdata[i]);
 
                 }
+                console.log(result);
+                var month = new Array();
+                month[0] = "Jan";
+                month[1] = "Feb";
+                month[2] = "Mar";
+                month[3] = "Apr";
+                month[4] = "May";
+                month[5] = "Jun";
+                month[6] = "Jul";
+                month[7] = "Aug";
+                month[8] = "Sep";
+                month[9] = "Oct";
+                month[10] = "Nov";
+                month[11] = "Dec";
+                nextMonth = month[Date.today().next().month().getMonth()];
+                myLineChart.data.labels.push(nextMonth);
+                myLineChart.data.datasets[1].data.push(jsonResult);
             }
 
-            
-                var options = {
-                    title: '',
-                    curveType: 'function',
-                    legend: { position: 'bottom' },
-                    vAxis: {minValue: 0}
-                };
-
-                var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-                chart.draw(data, options);
-
-
-
+            myLineChart.update();
         }
     });
 }
@@ -1253,9 +1327,15 @@ function myFunc(data) {
             </div>
             <div class="col-md-3">
                 <h3>Filter</h3>
+                <br> 
+                <button onclick="plotMonth()">Month</button>
+                <br>
+                <button onclick="plotWeek()">Week</button>
+
             </div>
-            <div class="col-md-9">
-                <div id="curve_chart" style="width: 900px; height: 500px"></div>
+            <div class="col-md-9" id="graphArea">
+<!--                <div id="curve_chart" style="width: 900px; height: 500px"></div>-->
+                <canvas id="myChart"  style=" height: 500px"></canvas>
             </div>
             
         </div>

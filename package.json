@@ -23,6 +23,7 @@
         "vue": "^2.5.17"
     },
     "dependencies": {
+        "chart.js": "^2.8.0",
         "timeseries-analysis": "^1.0.12"
     }
 }

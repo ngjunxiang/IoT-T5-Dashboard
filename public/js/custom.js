@@ -3268,7 +3268,7 @@ if (typeof NProgress != 'undefined') {
 					}
 				  },
 				  data: [{
-					value: 50,
+					value: 70,
 					name: 'Performance'
 				  }]
 				}]
