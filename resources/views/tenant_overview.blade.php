@@ -16,8 +16,9 @@
 $(function () {
 
 //Enter a level between 0 and 4
-var level = 4;
-var percentages = level * 25;
+var numPpl = $("#numPpL").text();
+var percentages = numPpl/85*100;
+var level = percentages/25;
 
 // Trig to calc meter point
 var degrees = 180 - (level) * 45;
@@ -105,6 +106,35 @@ Plotly.newPlot('myDiv', data, layout, { responsive: true });
         });
     });
 });
+var myClock = document.getElementById("clock");
+function renderTime () {
+    var d = new Date();
+    utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    currentTime = new Date(utc + (3600000*8));
+    var h = currentTime.getHours();
+    var m = currentTime.getMinutes();
+    var s = currentTime.getSeconds();
+
+    if (h < 10) {
+        h = "0" + h;
+    }
+
+
+    if (m < 10) {
+        m = "0" + m;
+    }
+
+
+    if (s < 10) {
+        s = "0" + s;
+    }
+
+    //myClock.textContent = h + ":" + m + ":" + s;
+    myClock.innerText = h + ":" + m + ":" + s;
+
+    setTimeout(renderTime, 1000);
+}
+renderTime();
 </script>
 
 @endsection
@@ -130,7 +160,7 @@ Plotly.newPlot('myDiv', data, layout, { responsive: true });
 
                         </div>
 
-                        <h2 class="name">
+                        <h2 class="name" id="numPpl">
                             <strong>{{ $latest['numPeopleDetected'] }} </strong></i><i class="fa fa-male"></i>
                         </h2>
                         <p>@ HubQuaters</p>
@@ -139,7 +169,7 @@ Plotly.newPlot('myDiv', data, layout, { responsive: true });
 
                         <div class="flex">
                             <ul class="list-inline count2">
-                                <h3>{{ date('h:i:s a') }}</h3>
+                                <h3 id="clock"></h3>
                                 <span>{{ date('d F Y') }}</span>
                             </ul>
                         </div>

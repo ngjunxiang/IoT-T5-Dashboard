@@ -89,6 +89,7 @@ $(document).ready(function(){
             //peakhours(data);
         }
     });
+    plotGauge();
 });
 function plotMonth(){
    
@@ -148,7 +149,336 @@ function plotGraph(data,type){
         
     }
     var predictedData = predict(Rawdata,result,type);
+    var test = $("#echart_gauge");
+    
     //figure out how to feed data in
+    
+}
+
+function plotGauge(){
+    var value = $("#percentage_Occ").text();
+    var rawValue = value.split(' ')[1];
+    var percentage = rawValue.substring(0,rawValue.length-1);
+    var a = {
+            color: ["#26B99A", "#34495E", "#BDC3C7", "#3498DB", "#9B59B6", "#8abb6f", "#759c6a", "#bfd3b7"],
+            title: {
+                itemGap: 8,
+                textStyle: {
+                    fontWeight: "normal",
+                    color: "#408829"
+                }
+            },
+            dataRange: {
+                color: ["#1f610a", "#97b58d"]
+            },
+            toolbox: {
+                color: ["#408829", "#408829", "#408829", "#408829"]
+            },
+            tooltip: {
+                backgroundColor: "rgba(0,0,0,0.5)",
+                axisPointer: {
+                    type: "line",
+                    lineStyle: {
+                        color: "#408829",
+                        type: "dashed"
+                    },
+                    crossStyle: {
+                        color: "#408829"
+                    },
+                    shadowStyle: {
+                        color: "rgba(200,200,200,0.3)"
+                    }
+                }
+            },
+            dataZoom: {
+                dataBackgroundColor: "#eee",
+                fillerColor: "rgba(64,136,41,0.2)",
+                handleColor: "#408829"
+            },
+            grid: {
+                borderWidth: 0
+            },
+            categoryAxis: {
+                axisLine: {
+                    lineStyle: {
+                        color: "#408829"
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: ["#eee"]
+                    }
+                }
+            },
+            valueAxis: {
+                axisLine: {
+                    lineStyle: {
+                        color: "#408829"
+                    }
+                },
+                splitArea: {
+                    show: !0,
+                    areaStyle: {
+                        color: ["rgba(250,250,250,0.1)", "rgba(200,200,200,0.1)"]
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: ["#eee"]
+                    }
+                }
+            },
+            timeline: {
+                lineStyle: {
+                    color: "#408829"
+                },
+                controlStyle: {
+                    normal: {
+                        color: "#408829"
+                    },
+                    emphasis: {
+                        color: "#408829"
+                    }
+                }
+            },
+            k: {
+                itemStyle: {
+                    normal: {
+                        color: "#68a54a",
+                        color0: "#a9cba2",
+                        lineStyle: {
+                            width: 1,
+                            color: "#408829",
+                            color0: "#86b379"
+                        }
+                    }
+                }
+            },
+            map: {
+                itemStyle: {
+                    normal: {
+                        areaStyle: {
+                            color: "#ddd"
+                        },
+                        label: {
+                            textStyle: {
+                                color: "#c12e34"
+                            }
+                        }
+                    },
+                    emphasis: {
+                        areaStyle: {
+                            color: "#99d2dd"
+                        },
+                        label: {
+                            textStyle: {
+                                color: "#c12e34"
+                            }
+                        }
+                    }
+                }
+            },
+            force: {
+                itemStyle: {
+                    normal: {
+                        linkStyle: {
+                            strokeColor: "#408829"
+                        }
+                    }
+                }
+            },
+            chord: {
+                padding: 4,
+                itemStyle: {
+                    normal: {
+                        lineStyle: {
+                            width: 1,
+                            color: "rgba(128, 128, 128, 0.5)"
+                        },
+                        chordStyle: {
+                            lineStyle: {
+                                width: 1,
+                                color: "rgba(128, 128, 128, 0.5)"
+                            }
+                        }
+                    },
+                    emphasis: {
+                        lineStyle: {
+                            width: 1,
+                            color: "rgba(128, 128, 128, 0.5)"
+                        },
+                        chordStyle: {
+                            lineStyle: {
+                                width: 1,
+                                color: "rgba(128, 128, 128, 0.5)"
+                            }
+                        }
+                    }
+                }
+            },
+            gauge: {
+                startAngle: 225,
+                endAngle: -45,
+                axisLine: {
+                    show: !0,
+                    lineStyle: {
+                        color: [
+                            [.2, "#86b379"],
+                            [.8, "#68a54a"],
+                            [1, "#408829"]
+                        ],
+                        width: 8
+                    }
+                },
+                axisTick: {
+                    splitNumber: 10,
+                    length: 12,
+                    lineStyle: {
+                        color: "auto"
+                    }
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: "auto"
+                    }
+                },
+                splitLine: {
+                    length: 18,
+                    lineStyle: {
+                        color: "auto"
+                    }
+                },
+                pointer: {
+                    length: "90%",
+                    color: "auto"
+                },
+                title: {
+                    textStyle: {
+                        color: "#333"
+                    }
+                },
+                detail: {
+                    textStyle: {
+                        color: "auto"
+                    }
+                }
+            },
+            textStyle: {
+                fontFamily: "Arial, Verdana, sans-serif"
+            }
+        };
+    var e = echarts.init(document.getElementById("echart_gauge"), a);
+    e.setOption({
+        tooltip: {
+            formatter: "{a} <br/>{b} : {c}%"
+        },
+        toolbox: {
+            show: !0,
+            feature: {
+                restore: {
+                    show: !0,
+                    title: "Restore"
+                },
+                saveAsImage: {
+                    show: !0,
+                    title: "Save Image"
+                }
+            }
+        },
+        series: [{
+            name: "Performance",
+            type: "gauge",
+            center: ["50%", "50%"],
+            startAngle: 140,
+            endAngle: -140,
+            min: 0,
+            max: 100,
+            precision: 0,
+            splitNumber: 10,
+            axisLine: {
+                show: !0,
+                lineStyle: {
+                    color: [
+                        [.2, "lightgreen"],
+                        [.4, "orange"],
+                        [.8, "skyblue"],
+                        [1, "#ff4500"]
+                    ],
+                    width: 30
+                }
+            },
+            axisTick: {
+                show: !0,
+                splitNumber: 5,
+                length: 8,
+                lineStyle: {
+                    color: "#eee",
+                    width: 1,
+                    type: "solid"
+                }
+            },
+            axisLabel: {
+                show: !0,
+                formatter: function(a) {
+                    switch (a + "") {
+                        case "10":
+                            return "a";
+                        case "30":
+                            return "b";
+                        case "60":
+                            return "c";
+                        case "90":
+                            return "d";
+                        default:
+                            return ""
+                    }
+                },
+                textStyle: {
+                    color: "#333"
+                }
+            },
+            splitLine: {
+                show: !0,
+                length: 30,
+                lineStyle: {
+                    color: "#eee",
+                    width: 2,
+                    type: "solid"
+                }
+            },
+            pointer: {
+                length: "80%",
+                width: 8,
+                color: "auto"
+            },
+            title: {
+                show: !0,
+                offsetCenter: ["-65%", -10],
+                textStyle: {
+                    color: "#333",
+                    fontSize: 15
+                }
+            },
+            detail: {
+                show: !0,
+                backgroundColor: "rgba(0,0,0,0)",
+                borderWidth: 0,
+                borderColor: "#ccc",
+                width: 100,
+                height: 40,
+                offsetCenter: ["-60%", 10],
+                formatter: "{value}%",
+                textStyle: {
+                    color: "auto",
+                    fontSize: 30
+                }
+            },
+            data: [{
+                value: percentage,
+                name: "Occupancy"
+            }]
+        }]
+    })
     
 }
 function predict(Rawdata,result,type){
@@ -861,7 +1191,7 @@ function myFunc(data) {
         <div class="tile-stats">
             <div class="icon"><i class="fa fa-male"></i></div>
             <div class="count">{{ $latest['numPeopleDetected'] }}</div>
-            <h3>Occupancy: {{ number_format($latest['numPeopleDetected']/env('MAX_OCCUPANCY')*100) }}%</h3>
+            <h3 id="percentage_Occ">Occupancy: {{ number_format($latest['numPeopleDetected']/env('MAX_OCCUPANCY')*100) }}%</h3>
             <p>Real-Time No. Of Customers</p>
         </div>
     </div>
