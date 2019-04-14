@@ -97,6 +97,19 @@ Plotly.newPlot('myDiv', data, layout, { responsive: true });
         $(this).text("REQUESTED");
         $(this).addClass("btn-danger");
         $(this).removeClass("btn-success");
+        $.ajax ({
+        type: "POST",
+        url: "http://3.1.241.179/api/tenants/request",
+        datatype: "application/json",
+        contentType:"application/json",
+        data: JSON.stringify({ 
+            'requested': true,
+            'email':'tenant@hubquarters.com'
+            }),
+        success: function (e) {
+            console.log(e);
+        }
+        });
     });
 
 
