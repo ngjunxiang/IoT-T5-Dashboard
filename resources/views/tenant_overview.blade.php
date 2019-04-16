@@ -143,18 +143,34 @@ function renderTime () {
     }
 
     //myClock.textContent = h + ":" + m + ":" + s;
-    myClock.innerText = h + ":" + m + ":" + s;
+    myClock.innerText = tConvert(h + ":" + m + ":" + s, true);
 
     setTimeout(renderTime, 1000);
 }
 renderTime();
+function tConvert (time, seconds = false) {
+  // Check correct time format and split into components
+  time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+  if (time.length > 1) { // If time format correct
+    time = time.slice (1);  // Remove full string match value
+    if (seconds) {
+        time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+    } else {
+        time[5] = +time[0] < 12 ? ':00 AM' : ':00 PM'; // Set AM/PM
+    }
+    time[0] = +time[0] % 12 || 12; // Adjust hours
+  }
+  return time.join (''); // return adjusted time or original string
+}
+
 </script>
 
 @endsection
 
 @section('content')
 <div class="page-title">
-    <h3>Scape HubQuaters Dashboard </h3>
+    <h3>Scape HubQuarters Dashboard </h3>
 </div>
 @if (session('status'))
     <div class="alert alert-success" role="alert">
@@ -176,7 +192,7 @@ renderTime();
                         <h2 class="name" id="numPpl">
                             <strong>{{ $latest['numPeopleDetected'] }} </strong></i><i class="fa fa-male"></i>
                         </h2>
-                        <p>@ HubQuaters</p>
+                        <p>@ HubQuarters</p>
 
 
 

@@ -12,7 +12,7 @@
 
 @section('content')
 <div class="page-title">
-    <h3>Scape HubQuaters Dashboard </h3>
+    <h3>Scape HubQuarters Dashboard </h3>
 </div>
 <div class="clearfix"></div>
 <div class="">
