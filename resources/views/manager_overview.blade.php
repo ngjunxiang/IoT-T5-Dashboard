@@ -14,6 +14,9 @@
 <!-- Monthly Forecast Chart -->
 <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
 <script src="{{ URL::asset('js/chart.js') }}"></script>
+<link rel="stylesheet" href="{{ URL::asset('css/bar.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+<script src="{{ URL::asset('js/graph.js') }}"></script>
 <script type="text/javascript">
 var ctx = document.getElementById('myChart').getContext('2d');
 var config = {
@@ -1360,7 +1363,7 @@ function myFunc(data) {
 
 <!----------------- Third Tier (Tables)--------------------->
 <div class="row">
-    <div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
                 <h2>Peak Hours ( >= 90% Occupancy Rate) </h2>
@@ -1394,7 +1397,7 @@ function myFunc(data) {
         </div>
     </div>
 
-    <div class="col-md-6 col-sm-6 col-xs-12 ">
+    <div class="col-md-12 col-sm-12 col-xs-12 ">
         <div class="x_panel">
             <div class="x_title">
                 <h2>Hourly Occupancy Rate Prediction</h2>
@@ -1406,7 +1409,7 @@ function myFunc(data) {
                 <h5>To identify the need for action for days reaching maximum occupancy </h5>
             </div>
             <div class="x_content">
-                <div class="col-xs-12 bg-white progress_summary">
+                <!--<div class="col-xs-12 bg-white progress_summary">
                     <div class="row" style="margin-top:10px;">
                         <div class="col-xs-2">
                             <span>9 AM</span>
@@ -1650,6 +1653,84 @@ function myFunc(data) {
                     </div>
 
 
+                </div>-->
+                <div class="Plotchart">
+                    <table id="data-table" border="1" cellpadding="0" cellspacing="0"
+                    summary="Percentage of knowledge acquired during my experience
+                    for each technology or language.">
+                        <thead>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">9 AM</th>
+                            <td>{{ $percentage['09'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">10 AM</th>
+                            <td>{{ $percentage['10'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">11 AM</th>
+                            <td>{{ $percentage['11'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">12 PM</th>
+                            <td>{{ $percentage['12'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">1 PM</th>
+                            <td>{{ $percentage['13'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2 PM</th>
+                            <td>{{ $percentage['14'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3 PM</th>
+                            <td>{{ $percentage['15'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">4 PM</th>
+                            <td>{{ $percentage['16'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">5 PM</th>
+                            <td>{{ $percentage['17'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">6 PM</th>
+                            <td>{{ $percentage['18'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">7 PM</th>
+                            <td>{{ $percentage['19'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">8 PM</th>
+                            <td>{{ $percentage['20'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">9 PM</th>
+                            <td>{{ $percentage['21'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">10 PM</th>
+                            <td>{{ $percentage['22'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">11 PM</th>
+                            <td>{{ $percentage['23'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">12 AM</th>
+                            <td>{{ $percentage['00'] }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
