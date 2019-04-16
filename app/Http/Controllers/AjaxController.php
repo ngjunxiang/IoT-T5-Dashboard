@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -53,6 +54,25 @@ class AjaxController extends Controller
     {
         $client = new Client();
         $response = $client->get(env('API_HOST') . '/api/liveimage?order=asc&aggregate=month');
+        if ($response->getStatusCode() === 200) {
+            $decodedResponse = json_decode($response->getBody()->getContents(), true);
+            if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {
+                return $decodedResponse;
+            }
+        }
+
+        return null;
+    }
+
+    public function tenantRequest(Request $request) {
+        $client = new Client();
+        $response = $client->post(env('API_HOST') . '/api/tenants/request', [
+            'form_params' => [
+                'email' => Auth::user()->email,
+                'requested' => 'true',
+            ],
+        ]);
+
         if ($response->getStatusCode() === 200) {
             $decodedResponse = json_decode($response->getBody()->getContents(), true);
             if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {

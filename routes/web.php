@@ -37,4 +37,5 @@ Route::group(['prefix' => 'ajax', 'middleware' => 'auth'], function () {
     Route::get('/MonthUrl', 'AjaxController@MonthUrl')->name('MonthUrl');
     Route::get('/WeekUrlAsc', 'AjaxController@WeekUrlAsc')->name('WeekUrlAsc');
     Route::get('/MonthUrlAsc', 'AjaxController@MonthUrlAsc')->name('MonthUrlAsc');
+    Route::get('/tenantRequest', 'AjaxController@tenantRequest')->name('tenantRequest');
 });
