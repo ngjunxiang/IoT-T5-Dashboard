@@ -400,7 +400,7 @@ function plotGauge(){
                 lineStyle: {
                     color: [
                         [.2, "lightgreen"],
-                        [.4, "orange"],
+                        [.4, "lightgreen"],
                         [.8, "skyblue"],
                         [1, "#ff4500"]
                     ],
@@ -422,13 +422,11 @@ function plotGauge(){
                 formatter: function(a) {
                     switch (a + "") {
                         case "10":
-                            return "a";
-                        case "30":
-                            return "b";
+                            return "Low";
                         case "60":
-                            return "c";
+                            return "Medium";
                         case "90":
-                            return "d";
+                            return "High";
                         default:
                             return ""
                     }
@@ -527,7 +525,6 @@ function predict(Rawdata,result,type){
                     myLineChart.data.datasets[1].data.push(Rawdata[i]);
 
                 }
-                console.log(result);
                 var month = new Array();
                 month[0] = "Jan";
                 month[1] = "Feb";
@@ -562,7 +559,8 @@ function peakhours(data){
     var fri = []; 
     var sat = []; 
     var sun = [];
-    var count = [];  
+    var count = []; 
+    var dates = [0,0,0,0,0,0,0]; 
     for(var k in data) {
         if (counter == 1)
         {
@@ -575,7 +573,9 @@ function peakhours(data){
        var dt = new Date(rawData[i]["created_at"]);
        var day = dt.getDay();
        var hour = dt.getHours(); 
+       var date = dt.getDate()+"/"+dt.getMonth()+"/"+parseInt(dt.getYear()+1900);
        var numPpl = rawData[i]["numPeopleDetected"];
+       dates[day-1] = date;
        if(day == 1)
        {
            if(mon[hour]== null ){
@@ -585,6 +585,7 @@ function peakhours(data){
                 var value = mon[hour];
                 mon[hour] = value + numPpl;  
            }
+           
              
        }
        else if (day == 2 )
@@ -653,13 +654,13 @@ function peakhours(data){
             count[day]++; 
 
    }
-   addToList(mon,"Monday",count,1,result);
-   addToList(tue,"Tuesday",count,2,result);
-   addToList(wed,"Wednesday",count,3,result);
-   addToList(thu,"Thursday",count,4,result);
-   addToList(fri,"Friday",count,5,result);
-   addToList(sat,"Saturaday",count,6,result);
-   addToList(sun,"Sunday",count,0,result);
+   addToList(mon,"Monday",count,1,result,dates[1]);
+   addToList(tue,"Tuesday",count,2,result,dates[2]);
+   addToList(wed,"Wednesday",count,3,result,dates[3]);
+   addToList(thu,"Thursday",count,4,result,dates[4]);
+   addToList(fri,"Friday",count,5,result,dates[5]);
+   addToList(sat,"Saturaday",count,6,result,dates[6]);
+   addToList(sun,"Sunday",count,0,result,dates[0]);
    var output="";
    for(var i in result)
    {
@@ -671,13 +672,12 @@ function peakhours(data){
        output += "      <td>"+arry[2]+"</td>"
        output += "      <td>"+arry[3]+"</td>"
        output += "      </tr>"
-       console.log(arry[0]);
 
    } 
    $("#peakhours").empty(); 
    $("#peakhours").append(output); 
 }
-function addToList (array, day,count,index,result)
+function addToList (array, day,count,index,result,date)
 {
     for(var i in array)
     {
@@ -687,7 +687,7 @@ function addToList (array, day,count,index,result)
         if(occupancyRate>10)
         {
             nextHr = parseInt(i) + 1; 
-            string = day+"," + i+":00-"+nextHr+":00,"+avg+","+occupancyRate;
+            string = day+","+date+ " "+ i+":00-"+nextHr+":00,"+avg+","+occupancyRate;
             result.push(string);
         }
                 
@@ -723,8 +723,6 @@ function MonthlyOccupancy(data)
             }
         
         }
-        console.log(totalOcc)
-        console.log(counter);
         avgOcc = Math.round(totalOcc/counter);
         string = k.split("-")[0]+","+avgOcc+","+Math.round(avgOcc/85*100);
         month.push(string);
@@ -774,7 +772,6 @@ function renderTime () {
 
     //myClock.textContent = h + ":" + m + ":" + s;
     myClock.innerText = tConvert(h + ":" + m + ":" + s);
-    console.log(myClock.innerText);
 
     setTimeout(renderTime, 1000);
 }
@@ -796,7 +793,6 @@ function tConvert (time) {
 // draw doughnut  chart
 function plotDoughnutChart(data){
     var week = new Array(7);
-    console.log(data);
     var rawData ="";
     var counter = 0 ;
     var total = 0 ;
@@ -804,7 +800,6 @@ function plotDoughnutChart(data){
         if (counter == 1)
         {
             rawData = data[k];
-            console.log(rawData);
             break;
         }
         counter ++; 
@@ -825,7 +820,6 @@ function plotDoughnutChart(data){
         }
 
     }
-    console.log(week);
     $("#doughnutChart").drawDoughnutChart(
     [
       { title: "Monday", value:week[1]/total , color: "#3498DB" },
@@ -1216,7 +1210,7 @@ function myFunc(data) {
             <div class="icon"><i class="fa fa-users"></i></div>
             <div class="count">80</div>
             <h3>Max Sign-Up: {{env('MAX_OCCUPANCY')}}</h3>
-            <p>Present Customer Sign-Ups</p>
+            <p>Present Tenant Sign-Ups</p>
         </div>
     </div>
 </div>
@@ -1281,7 +1275,7 @@ function myFunc(data) {
     <div class="col-md-4 col-sm-4 col-xs-12">
         <div class="x_panel tile overflow_hidden">
             <div class="x_title">
-                <h2>Weekly Usage Breakdown (%)</h2>
+                <h2>Weekly Usage Breakdown</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -1371,7 +1365,7 @@ function myFunc(data) {
                 </ul>
                 <div class="clearfix"></div>
 
-                <h5>To identify the peak hours in the week nearing maximum occupancy rate that call for
+                <h5>To identify the peak hours in the previous week nearing maximum occupancy rate that call for
                     further action. </h5>
             </div>
             <div class="x_content">
