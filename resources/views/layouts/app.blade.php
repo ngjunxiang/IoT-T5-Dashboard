@@ -109,7 +109,7 @@
                         @if (Auth::user()->hasRole('tenant'))
                         <ul class="nav navbar-nav navbar-right">
                             <li role="presentation" class="dropdown">
-                                <button class='btn btn-success pushme-with-color'>NO SEAT</button>
+                                <a href="tg://t.me/HubQuartersCMSBot" class='btn btn-success' style="color: #ffffff !important;">Request Seat</a>
 
                             </li>
                         </ul>

@@ -87,31 +87,6 @@ var layout = {
 
 Plotly.newPlot('myDiv', data, layout, { responsive: true });
 
-
-    $(".pushme").click(function () {
-        $(this).text("DON'T PUSH ME");
-    });
-
-    $(".pushme-with-color").click(function () {
-        $(this).text("REQUESTED");
-        $(this).addClass("btn-danger");
-        $(this).removeClass("btn-success");
-        $.ajax ({
-        type: "GET",
-        url: "{{ route('tenantRequest') }}",
-        contentType:"application/json",
-        success: function (e) {
-            console.log(e);
-        }
-        });
-    });
-
-
-    $(".pushme2").click(function(){
-        $(this).text(function(i, v){
-            return v === 'PUSH ME' ? 'PULL ME' : 'PUSH ME'
-        });
-    });
 });
 var myClock = document.getElementById("clock");
 function renderTime () {
