@@ -16,10 +16,9 @@
 $(function () {
 
 //Enter a level between 0 and 4
-var numPpl = $("#numPpL").text();
+var numPpl = parseInt("{{ $latest['numPeopleDetected'] }}");
 var percentages = numPpl/85*100;
 var level = percentages/25;
-
 // Trig to calc meter point
 var degrees = 180 - (level) * 45;
 radius = .5;
@@ -73,7 +72,7 @@ var layout = {
             color: '000000'
         }
     }],
-    title: 'Occupancy Rate: ' + percentages + '%',
+    title: 'Occupancy Rate: ' + Math.round(percentages) + '%',
     //height: 500,
     //width: 600,
     xaxis: {
