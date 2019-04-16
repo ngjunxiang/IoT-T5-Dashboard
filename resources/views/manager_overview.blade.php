@@ -58,7 +58,7 @@ var currNumPpl = 0;
 //google.charts.load('current', {'packages':['corechart']});
 $(document).ready(function(){
     
-    var WeekUrl = "http://3.1.241.179/api/liveimage?order=desc&aggregate=week";
+    var WeekUrl = "{{ route('WeekUrl') }}";
     $.ajax ({
         url: WeekUrl,
         datatype: "json",
@@ -69,7 +69,7 @@ $(document).ready(function(){
             plotDoughnutChart(data);
         }
     });
-    var MonthUrl = "http://3.1.241.179/api/liveimage?order=desc&aggregate=month";
+    var MonthUrl = "{{ route('MonthUrl') }}";
     $.ajax ({
         url: MonthUrl,
         datatype: "json",
@@ -79,7 +79,7 @@ $(document).ready(function(){
         }
 
     });
-    var WeekUrlAsc = "http://3.1.241.179/api/liveimage?order=asc&aggregate=week";
+    var WeekUrlAsc = "{{ route('WeekUrlAsc') }}";
     $.ajax ({
         url: WeekUrlAsc,
         datatype: "json",
@@ -93,9 +93,9 @@ $(document).ready(function(){
 });
 function plotMonth(){
    
-    var MonthUrl = "http://3.1.241.179/api/liveimage?order=asc&aggregate=month";
+    var MonthUrlAsc = "{{ route('MonthUrlAsc') }}";
     $.ajax ({
-        url: MonthUrl,
+        url: MonthUrlAsc,
         datatype: "json",
         success: function (e) {
             var data = e["images"];
@@ -106,7 +106,7 @@ function plotMonth(){
 }
 function plotWeek(){
     
-    var WeekUrlAsc = "http://3.1.241.179/api/liveimage?order=asc&aggregate=week";
+    var WeekUrlAsc = "{{ route('WeekUrlAsc') }}";
     $.ajax ({
         url: WeekUrlAsc,
         datatype: "json",

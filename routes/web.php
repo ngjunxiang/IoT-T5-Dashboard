@@ -31,3 +31,10 @@ Route::group(['middleware' => ['roles', 'auth'], 'roles' => ['manager']], functi
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/overview', 'DashboardController@overview')->name('overview');
 });
+
+Route::group(['prefix' => 'ajax', 'middleware' => 'auth'], function () {
+    Route::get('/WeekUrl', 'AjaxController@WeekUrl')->name('WeekUrl');
+    Route::get('/MonthUrl', 'AjaxController@MonthUrl')->name('MonthUrl');
+    Route::get('/WeekUrlAsc', 'AjaxController@WeekUrlAsc')->name('WeekUrlAsc');
+    Route::get('/MonthUrlAsc', 'AjaxController@MonthUrlAsc')->name('MonthUrlAsc');
+});
