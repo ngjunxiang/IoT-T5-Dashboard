@@ -4,7 +4,9 @@
 <script type="text/javascript">
   $(function () {
       $('#records').DataTable({
-          "order": [[ 0, "desc" ]]
+          "order": [[ 0, "desc" ]],
+          "bPaginate": false,
+          "bInfo": false,
       });
   });
   </script>
@@ -48,9 +50,6 @@
                           <td class="hidden">{{ $liveImage['created_at'] }}</td>
                           <td>{{ date('d F Y', strtotime($liveImage['created_at'])) }}</td>
                           <td>
-                            @if (isset($liveImages[$index - 1]))
-                            {{ date('h:i:s A', round(strtotime($liveImages[$index - 1]['created_at'])/60)*60) }} -
-                            @endif
                             {{ date('h:i:s A', round(strtotime($liveImage['created_at'])/60)*60) }}
                           </td>
                           <td class='text-center'>{{ $liveImage['numPeopleDetected'] }}</td>
