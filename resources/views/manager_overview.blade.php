@@ -574,8 +574,10 @@ function peakhours(data){
        var day = dt.getDay();
        var hour = dt.getHours(); 
        var date = dt.getDate()+"/"+dt.getMonth()+"/"+parseInt(dt.getYear()+1900);
+       var month = dt.toLocaleString('en-us', { month: 'long' });
+       var formattedDate = dt.getDate() + " " + month + " " + parseInt(dt.getYear()+1900);
        var numPpl = rawData[i]["numPeopleDetected"];
-       dates[day-1] = date;
+       dates[day-1] = formattedDate;
        if(day == 1)
        {
            if(mon[hour]== null ){
@@ -669,8 +671,8 @@ function peakhours(data){
        output += "  <th scope=\"row\">"+(parseInt(i)+1)+"</th>"
        output += "      <td>"+arry[0]+"</td>"
        output += "      <td>"+arry[1]+" </td>"
-       output += "      <td>"+arry[2]+"</td>"
-       output += "      <td>"+arry[3]+"</td>"
+       output += "      <td class='text-center'>"+arry[2]+"</td>"
+       output += "      <td class='text-center'>"+arry[3]+"</td>"
        output += "      </tr>"
 
    } 
@@ -687,7 +689,7 @@ function addToList (array, day,count,index,result,date)
         if(occupancyRate>10)
         {
             nextHr = parseInt(i) + 1; 
-            string = day+","+date+ " "+ i+":00-"+nextHr+":00,"+avg+","+occupancyRate;
+            string = day+","+date+ " "+ tConvert(i+":00")+" - "+tConvert(nextHr+":00")+","+avg+","+occupancyRate;
             result.push(string);
         }
                 
@@ -771,19 +773,23 @@ function renderTime () {
     }
 
     //myClock.textContent = h + ":" + m + ":" + s;
-    myClock.innerText = tConvert(h + ":" + m + ":" + s);
+    myClock.innerText = tConvert(h + ":" + m + ":" + s, true);
 
     setTimeout(renderTime, 1000);
 }
 renderTime();
 
-function tConvert (time) {
+function tConvert (time, seconds = false) {
   // Check correct time format and split into components
   time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
 
   if (time.length > 1) { // If time format correct
     time = time.slice (1);  // Remove full string match value
-    time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+    if (seconds) {
+        time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+    } else {
+        time[5] = +time[0] < 12 ? ':00 AM' : ':00 PM'; // Set AM/PM
+    }
     time[0] = +time[0] % 12 || 12; // Adjust hours
   }
   return time.join (''); // return adjusted time or original string
@@ -1375,9 +1381,9 @@ function myFunc(data) {
                         <tr>
                             <th>#</th>
                             <th>Day</th>
-                            <th>Time (Hourly)</th>
-                            <th># Tenants</th>
-                            <th>Occupancy (%)</th>
+                            <th>Date Time (Hourly)</th>
+                            <th class='text-center'># Tenants</th>
+                            <th class='text-center'>Occupancy (%)</th>
                         </tr>
                     </thead>
                     <tbody id="peakhours">
@@ -1614,7 +1620,7 @@ function myFunc(data) {
                     </div>
                     <div class="row" style="margin-top:10px;">
                         <div class="col-xs-2">
-                            <span>1 PM</span>
+                            <span>11 PM</span>
                         </div>
                         <div class="col-xs-8">
                             <div class="progress progress_sm">
