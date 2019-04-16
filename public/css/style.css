@@ -124,7 +124,7 @@ a {
 	height: 10px;
 	margin: 0;
 	padding: 10px 5px;
-	width: 50px;
+	width: 60px;
 	color: #000;
 	text-shadow: rgba(0, 0, 0, 0.5) 0 1px 0;
 }
@@ -202,52 +202,52 @@ a {
 	left: 0;
 }
 .bar.fig1 {
-	left: 50px;
+	left: 60px;
 }
 .bar.fig2 {
-	left: 100px;
+	left: 120px;
 }
 .bar.fig3 {
-	left: 150px;
+	left: 180px;
 }
 .bar.fig4 {
-	left: 200px;
+	left: 240px;
 }
 .bar.fig5 {
-	left: 250px;
-}
-.bar.fig6 {
 	left: 300px;
 }
+.bar.fig6 {
+	left: 360px;
+}
 .bar.fig7 {
-	left: 350px;
+	left: 420px;
 }
 .bar.fig8 {
-	left: 400px;
+	left: 480px;
 }
 .bar.fig9 {
-	left: 450px;
+	left: 540px;
 }
 .bar.fig10 {
-	left: 500px;
-}
-.bar.fig11 {
-	left: 550px;
-}
-.bar.fig12 {
 	left: 600px;
 }
+.bar.fig11 {
+	left: 660px;
+}
+.bar.fig12 {
+	left: 720px;
+}
 .bar.fig13 {
-	left: 650px;
+	left: 780px;
 }
 .bar.fig14 {
-	left: 700px;
+	left: 840px;
 }
 .bar.fig15 {
-	left: 750px;
+	left: 900px;
 }
 .bar.fig16 {
-	left: 800px;
+	left: 960px;
 }
 .bar span {
 	font-size: 30px;

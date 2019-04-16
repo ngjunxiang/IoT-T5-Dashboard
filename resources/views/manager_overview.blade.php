@@ -1268,6 +1268,7 @@ function myFunc(data) {
                             <th width="5%">Months</th>
                             <th width="35%" class='text-center'>Avg Tenants</th>
                             <th width="60%" class='text-center'>Avg Occupancy (%)</th>
+                            <th width="60%" class='text-center'>Period</th>
                         </tr>
                     </thead>
                     <tbody id="monthlyOcc">
