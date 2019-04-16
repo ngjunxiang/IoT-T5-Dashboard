@@ -738,8 +738,8 @@ function MonthlyOccupancy(data)
         output+="<tr>";
         output+="   <th scope=\"row\">"+(parseInt(i)+1)+"</th>";
         output+="   <td>"+array[0]+"</td>";
-        output+="   <td>"+array[1]+"</td>";
-        output+="   <td>"+array[2]+"</td>";
+        output+="   <td class='text-center'>"+array[1]+"</td>";
+        output+="   <td class='text-center'>"+array[2]+"</td>";
         output+="</tr>";
     }
     $("#monthlyOcc").empty();
@@ -1263,8 +1263,8 @@ function myFunc(data) {
                         <tr>
                             <th width="5%">#</th>
                             <th width="5%">Months</th>
-                            <th width="35%">Avg Tenants</th>
-                            <th width="60%">Avg Occupancy (%)</th>
+                            <th width="35%" class='text-center'>Avg Tenants</th>
+                            <th width="60%" class='text-center'>Avg Occupancy (%)</th>
                         </tr>
                     </thead>
                     <tbody id="monthlyOcc">

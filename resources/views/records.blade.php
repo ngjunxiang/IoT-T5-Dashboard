@@ -68,8 +68,8 @@
                             @endif
                             {{ date('h:i:s A', round(strtotime($liveImage['created_at'])/60)*60) }}
                           </td>
-                          <td>{{ $liveImage['numPeopleDetected'] }}</td>
-                          <td>{{ number_format($liveImage['numPeopleDetected']/env('MAX_OCCUPANCY')*100) }}%</td>
+                          <td class='text-center'>{{ $liveImage['numPeopleDetected'] }}</td>
+                          <td class='text-center'>{{ number_format($liveImage['numPeopleDetected']/env('MAX_OCCUPANCY')*100) }}%</td>
                       </tr>
                       @endforeach
                   </tbody>
