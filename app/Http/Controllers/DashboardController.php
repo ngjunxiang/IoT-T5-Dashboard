@@ -35,16 +35,29 @@ class DashboardController extends Controller
     
     public function records(Request $request)
     {
-        $liveImages = $this->getLiveImages();
-
-        $data = ['liveImages' => $liveImages];
+        $liveImages = $this->getLiveImagesPaginated();
+        $data = ['liveImages' => collect($liveImages)->reverse()->paginate(5)];
         return view('records')->with($data);
+    }
+
+    public function getLiveImagesPaginated()
+    {
+        $client = new Client();
+        $response = $client->get(env('API_HOST') . '/api/liveimage?order=asc');
+        if ($response->getStatusCode() === 200) {
+            $decodedResponse = json_decode($response->getBody()->getContents(), true);
+            if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {
+                return $decodedResponse['images'];
+            }
+        }
+
+        return null;
     }
 
     public function getLiveImages()
     {
         $client = new Client();
-        $response = $client->get(env('API_HOST') . '/api/liveimage/');
+        $response = $client->get(env('API_HOST') . '/api/liveimage?limit=5000');
         if ($response->getStatusCode() === 200) {
             $decodedResponse = json_decode($response->getBody()->getContents(), true);
             if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {

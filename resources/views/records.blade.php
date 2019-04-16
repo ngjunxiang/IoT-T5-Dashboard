@@ -56,7 +56,7 @@
                           <td class='text-center'>{{ $liveImage['numPeopleDetected'] }}</td>
                           <td class='text-center'>{{ number_format($liveImage['numPeopleDetected']/env('MAX_OCCUPANCY')*100) }}%</td>
                           @if (Storage::disk('s3')->exists('/processed/' . $liveImage['imageName'] . '.jpg'))
-                          <td class='text-center'><a target="_blank" href="{{ Storage::url('/processed/' . $liveImage['imageName'] . '.jpg') }}"><img width="200" class="img-fluid" src="{{ Storage::url('/processed/' . $liveImage['imageName'] . '.jpg') }}" /></a></td>
+                          <td class='text-center'><a target="_blank" href="{{ Storage::disk('s3')->url('/processed/' . $liveImage['imageName'] . '.jpg') }}"><img width="200" class="img-fluid" src="{{ Storage::url('/processed/' . $liveImage['imageName'] . '.jpg') }}" /></a></td>
                           @else
                           <td class='text-center'>Error</td>
                           @endif
@@ -64,6 +64,8 @@
                       @endforeach
                   </tbody>
                 </table>
+
+                {{ $liveImages->links() }}
               </div>
             </div>
           </div>

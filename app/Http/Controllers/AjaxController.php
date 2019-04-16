@@ -11,7 +11,7 @@ class AjaxController extends Controller
     public function WeekUrl(Request $request)
     {
         $client = new Client();
-        $response = $client->get(env('API_HOST') . '/api/liveimage?order=desc&aggregate=week');
+        $response = $client->get(env('API_HOST') . '/api/liveimage?order=desc&aggregate=week&limit=5000');
         if ($response->getStatusCode() === 200) {
             $decodedResponse = json_decode($response->getBody()->getContents(), true);
             if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {
@@ -25,7 +25,7 @@ class AjaxController extends Controller
     public function MonthUrl(Request $request)
     {
         $client = new Client();
-        $response = $client->get(env('API_HOST') . '/api/liveimage?order=desc&aggregate=month');
+        $response = $client->get(env('API_HOST') . '/api/liveimage?order=desc&aggregate=month&limit=5000');
         if ($response->getStatusCode() === 200) {
             $decodedResponse = json_decode($response->getBody()->getContents(), true);
             if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {
@@ -39,7 +39,7 @@ class AjaxController extends Controller
     public function WeekUrlAsc(Request $request)
     {
         $client = new Client();
-        $response = $client->get(env('API_HOST') . '/api/liveimage?order=asc&aggregate=week');
+        $response = $client->get(env('API_HOST') . '/api/liveimage?order=asc&aggregate=week&limit=5000');
         if ($response->getStatusCode() === 200) {
             $decodedResponse = json_decode($response->getBody()->getContents(), true);
             if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {
@@ -53,7 +53,7 @@ class AjaxController extends Controller
     public function MonthUrlAsc(Request $request)
     {
         $client = new Client();
-        $response = $client->get(env('API_HOST') . '/api/liveimage?order=asc&aggregate=month');
+        $response = $client->get(env('API_HOST') . '/api/liveimage?order=asc&aggregate=month&limit=5000');
         if ($response->getStatusCode() === 200) {
             $decodedResponse = json_decode($response->getBody()->getContents(), true);
             if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {
