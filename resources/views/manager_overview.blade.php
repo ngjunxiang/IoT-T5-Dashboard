@@ -671,6 +671,7 @@ function peakhours(data){
        output += "      <td>"+arry[2]+"</td>"
        output += "      <td>"+arry[3]+"</td>"
        output += "      </tr>"
+       console.log(arry[0]);
 
    } 
    $("#peakhours").empty(); 
@@ -772,11 +773,25 @@ function renderTime () {
     }
 
     //myClock.textContent = h + ":" + m + ":" + s;
-    myClock.innerText = h + ":" + m + ":" + s;
+    myClock.innerText = tConvert(h + ":" + m + ":" + s);
+    console.log(myClock.innerText);
 
     setTimeout(renderTime, 1000);
 }
 renderTime();
+
+function tConvert (time) {
+  // Check correct time format and split into components
+  time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+  if (time.length > 1) { // If time format correct
+    time = time.slice (1);  // Remove full string match value
+    time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+    time[0] = +time[0] % 12 || 12; // Adjust hours
+  }
+  return time.join (''); // return adjusted time or original string
+}
+
 
 // draw doughnut  chart
 function plotDoughnutChart(data){
@@ -1192,7 +1207,7 @@ function myFunc(data) {
             <div class="icon"><i class="fa fa-male"></i></div>
             <div class="count">{{ $latest['numPeopleDetected'] }}</div>
             <h3 id="percentage_Occ">Occupancy: {{ number_format($latest['numPeopleDetected']/env('MAX_OCCUPANCY')*100) }}%</h3>
-            <p>Real-Time No. Of Customers</p>
+            <p>Real-Time # Tenants</p>
         </div>
     </div>
 
@@ -1228,272 +1243,45 @@ function myFunc(data) {
         </div>
     </div>
 
-    <div class="col-md-4 col-sm-6 col-xs-12 ">
+    <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Hourly Occupancy Rate Prediction</h2>
+                <h2>Avg Monthly Occupancy</h2>
+
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
-                <h5>To identify the need for action for days reaching maximum occupancy </h5>
+
+                <h5>To identify the peak and non-peak months to strategize customized plans.</h5>
             </div>
             <div class="x_content">
-                <div class="col-xs-12 bg-white progress_summary">
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>0900</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['09'] }}
-                                    style="width:0%;" aria-valuenow="87">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['09'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>1000</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['10'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['10'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>1100</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['11'] }}
-                                    style="width:0%;" aria-valuenow="67">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['11'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>1200</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['12'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['12'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
 
-                        <div class="col-xs-2">
-                            <span>1300</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['13'] }}
-                                    style="width: 0%;" aria-valuenow="67">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['13'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>1400</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['14'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['14'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>1500</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['15'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['15'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>1600</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['16'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['16'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>1700</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['17'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['17'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>1800</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['18'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['18'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>1900</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['19'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['19'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>2000</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['20'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['20'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>2100</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['21'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['21'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>2200</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['22'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['22'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>2300</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['23'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span id="2300">{{ $percentage['23'] }}%</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px;">
-                        <div class="col-xs-2">
-                            <span>0000</span>
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="progress progress_sm">
-                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['00'] }}
-                                    style="width:0%;" aria-valuenow="77">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-2 more_info">
-                            <span>{{ $percentage['00'] }}%</span>
-                        </div>
-                    </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th width="5%">#</th>
+                            <th width="5%">Months</th>
+                            <th width="35%">Avg Tenants</th>
+                            <th width="60%">Avg Occupancy (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monthlyOcc">
+                    </tbody>
+                </table>
 
-
-                </div>
             </div>
         </div>
     </div>
 
+   
+
 
     <div class="col-md-4 col-sm-4 col-xs-12">
-        <div class="x_panel tile fixed_height_320 overflow_hidden">
+        <div class="x_panel tile overflow_hidden">
             <div class="x_title">
-                <h2>Weekly Usage Breakdown(%)</h2>
+                <h2>Weekly Usage Breakdown (%)</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -1593,9 +1381,9 @@ function myFunc(data) {
                         <tr>
                             <th>#</th>
                             <th>Day</th>
-                            <th>Time(Hourly)</th>
-                            <th>No. of Customers</th>
-                            <th>Occupancy Rate(%)</th>
+                            <th>Time (Hourly)</th>
+                            <th># Tenants</th>
+                            <th>Occupancy (%)</th>
                         </tr>
                     </thead>
                     <tbody id="peakhours">
@@ -1606,38 +1394,267 @@ function myFunc(data) {
         </div>
     </div>
 
-
-    <div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="col-md-6 col-sm-6 col-xs-12 ">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Average Monthly Occupancy (Ascending Order) </h2>
-
+                <h2>Hourly Occupancy Rate Prediction</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
-
-                <h5>To identify the peak and non-peak months to strategize customized plans.</h5>
+                <h5>To identify the need for action for days reaching maximum occupancy </h5>
             </div>
             <div class="x_content">
+                <div class="col-xs-12 bg-white progress_summary">
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>9 AM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['09'] }}
+                                    style="width:0%;" aria-valuenow="87">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['09'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>10 AM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['10'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['10'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>11 AM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['11'] }}
+                                    style="width:0%;" aria-valuenow="67">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['11'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>12 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['12'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['12'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
 
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Months</th>
-                            <th>Average No. of Customers</th>
-                            <th>Average Occupancy Rate(%)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="monthlyOcc">
-                    </tbody>
-                </table>
+                        <div class="col-xs-2">
+                            <span>1 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['13'] }}
+                                    style="width: 0%;" aria-valuenow="67">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['13'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>2 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['14'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['14'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>3 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['15'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['15'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>4 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['16'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['16'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>5 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['17'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['17'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>6 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['18'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['18'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>7 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['19'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['19'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>8 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['20'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['20'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>9 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['21'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['21'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>10 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['22'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['22'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>1 PM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['23'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span id="2300">{{ $percentage['23'] }}%</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-2">
+                            <span>12 AM</span>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="progress progress_sm">
+                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ $percentage['00'] }}
+                                    style="width:0%;" aria-valuenow="77">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 more_info">
+                            <span>{{ $percentage['00'] }}%</span>
+                        </div>
+                    </div>
 
+
+                </div>
             </div>
         </div>
     </div>
+    
 
     <div class="clearfix"></div>
 </div>
@@ -1649,7 +1666,7 @@ function myFunc(data) {
         <div class="dashboard_graph">
             <div class="row x_title">
                 <div class="col-md-6">
-                    <h2>Daily Average Occupancy Historical & Forecasted Records</h2>
+                    <h2>Daily Avg Occupancy Historical &amp; Forecasted Records</h2>
                 </div>
                 <div class="col-md-6">
 
