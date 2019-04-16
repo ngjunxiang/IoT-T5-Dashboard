@@ -42,11 +42,17 @@
               render: function (data, type, row) { 
                 var d = new Date(data);
                 var h = d.getHours();
+                if (h.toString().length == 1) {
+                  h+="0";
+                }
                 var m = d.getMinutes();
                 if (m.toString().length == 1) {
                   m+="0";
                 }
-                var s = "00";
+                var s = d.getMinutes();
+                if (s.toString().length == 1) {
+                  s+="0";
+                }
                 return tConvert(h + ":" + m + ":" + s, true); 
               }
             },
