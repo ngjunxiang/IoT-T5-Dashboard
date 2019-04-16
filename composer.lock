@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6a3217ce3316940edc88520d7a5bbbf",
+    "content-hash": "3d0bc1ea4a4afdbc8e07f933f5879a87",
     "packages": [
+        {
+            "name": "acfbentveld/laravel-datatables",
+            "version": "2.0.25",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ACFBentveld/Laravel-datatables.git",
+                "reference": "fe90b9a8590195aec0602076a5f2ecf2f781ac8d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ACFBentveld/Laravel-datatables/zipball/fe90b9a8590195aec0602076a5f2ecf2f781ac8d",
+                "reference": "fe90b9a8590195aec0602076a5f2ecf2f781ac8d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ACFBentveld\\DataTables\\DataTablesServiceProvider"
+                    ],
+                    "aliases": {
+                        "DataTables": "ACFBentveld\\DataTables\\DataTablesFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ACFBentveld\\DataTables\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Wim Pruiksma",
+                    "email": "wim@acfbentveld.nl",
+                    "homepage": "https://acfbentveld.nl/",
+                    "role": "Lead developer"
+                }
+            ],
+            "description": "Datatables that supports pagination and recursive searching in relations",
+            "homepage": "https://github.com/ACFBentveld/Laravel-datatables",
+            "keywords": [
+                "datatables",
+                "laravel",
+                "models",
+                "pagination"
+            ],
+            "time": "2019-04-10T13:57:11+00:00"
+        },
         {
             "name": "aws/aws-sdk-php",
             "version": "3.91.4",

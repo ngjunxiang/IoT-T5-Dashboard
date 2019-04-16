@@ -2,12 +2,75 @@
 
 @section('custom-js')
 <script type="text/javascript">
+
+
   $(function () {
-      $('#records').DataTable({
-          "order": [[ 0, "desc" ]],
-          "bPaginate": false,
-          "bInfo": false,
-      });
+    function tConvert (time, seconds = false) {
+      // Check correct time format and split into components
+      time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+      if (time.length > 1) { // If time format correct
+        time = time.slice (1);  // Remove full string match value
+        if (seconds) {
+            time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+        } else {
+            time[5] = +time[0] < 12 ? ':00 AM' : ':00 PM'; // Set AM/PM
+        }
+        time[0] = +time[0] % 12 || 12; // Adjust hours
+      }
+      return time.join (''); // return adjusted time or original string
+    }
+      $('#records').DataTable( {
+        "order": [[ 0, "desc" ]],
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            url: "{{ route('dataTable') }}"
+            },
+            "columns": [
+              { data: 'created_at', visible: false },
+            { 
+              data: 'created_at', 
+              render: function (data, type, row) { 
+                var d = new Date(data);
+                var month = d.toLocaleString('en-us', { month: 'long' });
+                var formattedDate = d.getDate() + " " + month + " " + parseInt(d.getYear()+1900);
+                return formattedDate; 
+              }
+            },
+            { 
+              data: 'created_at', 
+              render: function (data, type, row) { 
+                var d = new Date(data);
+                var h = d.getHours();
+                var m = d.getMinutes();
+                if (m.toString().length == 1) {
+                  m+="0";
+                }
+                var s = "00";
+                return tConvert(h + ":" + m + ":" + s, true); 
+              }
+            },
+            { 
+              data: 'numPeopleDetected', 
+              render: function (data, type, row) { 
+                return '<a href=/sale/' + data + '>' + data + '</a>'; 
+              }
+            },
+            { 
+              data: 'numPeopleDetected', 
+              render: function (data, type, row) { 
+                return Math.round(data / "{{ env('MAX_OCCUPANCY') }}" * 100) + "%"; 
+              }
+            },
+            { 
+              data: 'imageName', 
+              render: function (data, type, row) { 
+                
+                return '<a target="_blank" href="{{ Storage::disk('s3')->url('/processed/') }}' + data + '.jpg"><img width="200" class="img-fluid" src="{{ Storage::disk('s3')->url('/processed/') }}' + data + '.jpg" /></a>';
+              }
+            }
+        ]
+    } );
   });
   </script>
 @endsection
@@ -45,7 +108,7 @@
 
 
                   <tbody>
-                      @foreach ($liveImages as $index => $liveImage) 
+                      {{-- @foreach ($liveImages as $index => $liveImage) 
                       <tr>
                           <td class="hidden">{{ $liveImage['created_at'] }}</td>
                           <td>{{ date('d F Y', strtotime($liveImage['created_at'])) }}</td>
@@ -60,11 +123,10 @@
                           <td class='text-center'>Error</td>
                           @endif
                       </tr>
-                      @endforeach
+                      @endforeach --}}
                   </tbody>
                 </table>
 
-                {{ $liveImages->links() }}
               </div>
             </div>
           </div>
