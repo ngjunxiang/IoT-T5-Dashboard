@@ -50,8 +50,8 @@
                       <th class="hidden">Timestamp</th>
                       <th>Date</th>
                       <th>Time Range (5 Min Intervals)</th>
-                      <th>No. of People</th>
-                      <th>Occupancy Rate</th>
+                      <th class="text-center">No. of People</th>
+                      <th class="text-center">Occupancy Rate</th>
 
                     </tr>
                   </thead>
