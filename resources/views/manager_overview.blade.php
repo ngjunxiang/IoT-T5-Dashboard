@@ -659,7 +659,7 @@ function peakhours(data){
    addToList(wed,"Wednesday",count,3,result,dates[3]);
    addToList(thu,"Thursday",count,4,result,dates[4]);
    addToList(fri,"Friday",count,5,result,dates[5]);
-   addToList(sat,"Saturaday",count,6,result,dates[6]);
+   addToList(sat,"Saturday",count,6,result,dates[6]);
    addToList(sun,"Sunday",count,0,result,dates[0]);
    var output="";
    for(var i in result)
@@ -837,7 +837,7 @@ function plotDoughnutChart(data){
     $("#wed").text(Math.round(week[3]/total*100));
     $("#thu").text(Math.round(week[4]/total*100));
     $("#fri").text(Math.round(week[5]/total*100));
-    $("#sat").text(Math.round(week[1]/total*100));
+    $("#sat").text(Math.round(week[6]/total*100));
 }
 
 
@@ -1337,7 +1337,7 @@ function myFunc(data) {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <p><i class="fa fa-square" style="color:#F2E68F"></i>Saturaday</p>
+                                        <p><i class="fa fa-square" style="color:#F2E68F"></i>Saturday</p>
                                     </td>
                                     <td><span id="sat"></span>%</td>
                                 </tr>
