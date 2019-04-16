@@ -39,7 +39,7 @@ class AjaxController extends Controller
     public function WeekUrlAsc(Request $request)
     {
         $client = new Client();
-        $response = $client->get(env('API_HOST') . '/api/liveimage?order=asc&aggregate=week&limit=5000');
+        $response = $client->get(env('API_HOST') . '/api/liveimage?order=asc&aggregate=week&from=2019-03-25T00:00:00&to=2019-04-15T00:00:00');
         if ($response->getStatusCode() === 200) {
             $decodedResponse = json_decode($response->getBody()->getContents(), true);
             if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {
@@ -53,7 +53,7 @@ class AjaxController extends Controller
     public function MonthUrlAsc(Request $request)
     {
         $client = new Client();
-        $response = $client->get(env('API_HOST') . '/api/liveimage?order=asc&aggregate=month&limit=5000');
+        $response = $client->get(env('API_HOST') . '/api/liveimage?order=asc&aggregate=month&from=2019-01-01T00:00:00&to=2019-04-15T00:00:00');
         if ($response->getStatusCode() === 200) {
             $decodedResponse = json_decode($response->getBody()->getContents(), true);
             if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {

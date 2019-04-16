@@ -121,17 +121,15 @@ class DashboardController extends Controller
             }
 
         }
-        //echo json_encode($hourlyResult);
         foreach ($hourlyResult as $key => $value) {
+            //echo json_encode($hourlyResult[$key]);
             $result[$key] = round($this->predict($hourlyResult[$key]) / 85 * 100);
         }
-        //echo json_encode($result);
         return $result;
 
     }
     public function predict($result)
     {
-
         $client = new Client([
             'headers' => ['Content-Type' => 'application/json'],
         ]);
