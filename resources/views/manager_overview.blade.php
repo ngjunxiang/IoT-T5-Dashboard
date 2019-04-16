@@ -729,8 +729,10 @@ function MonthlyOccupancy(data)
         
         }
         avgOcc = Math.round(totalOcc/counter);
-        string = k.split("-")[0]+","+avgOcc+","+Math.round(avgOcc/85*100);
-        month.push(string);
+        percent = Math.round(avgOcc/85*100);
+        string =  k.split("-")[0]+","+avgOcc+","+percent;
+        if(percent < 90)
+            month.push(string);
         counter = 0 ; 
         totalOcc= 0;
 
@@ -738,6 +740,7 @@ function MonthlyOccupancy(data)
     var output = "";
     for(var i in month){
         array = month[i].split(",");
+        console.log(array);
         output+="<tr>";
         output+="   <th scope=\"row\">"+(parseInt(i)+1)+"</th>";
         output+="   <td>"+array[0]+"</td>";
@@ -1249,7 +1252,7 @@ function myFunc(data) {
     <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Avg Monthly Occupancy</h2>
+                <h2>Top 3 peak months</h2>
 
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -1257,7 +1260,7 @@ function myFunc(data) {
                 </ul>
                 <div class="clearfix"></div>
 
-                <h5>To identify the peak and non-peak months to strategize customized plans.</h5>
+                <h5>To identify the top 3 peak months to strategize how to to ease the crowd</h5>
             </div>
             <div class="x_content">
 
@@ -1401,13 +1404,13 @@ function myFunc(data) {
     <div class="col-md-12 col-sm-12 col-xs-12 ">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Hourly Occupancy Rate Prediction</h2>
+                <h2>Predicted Hourly Occupancy Rate</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
-                <h5>To identify the need for action for days reaching maximum occupancy </h5>
+                <h5>To identify the hourly period reaching maximum occupancy </h5>
             </div>
             <div class="x_content">
                 <!--<div class="col-xs-12 bg-white progress_summary">
