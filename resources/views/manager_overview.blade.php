@@ -1663,28 +1663,26 @@ function myFunc(data) {
 <!--------------------------- Fourth Tier (History plus Forecast) --------------------->
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="dashboard_graph">
+        <div class="x_panel dashboard_graph">
             <div class="row x_title">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <h2>Daily Avg Occupancy Historical &amp; Forecasted Records</h2>
                 </div>
-                <div class="col-md-6">
+            </div>
+            <div class="x_content">
+            <div class="row" style="padding: 0 30px;">
+                <div class="col-md-3">
+                    <h3>Filter</h3>
+                    <br> 
+                    <button class="btn btn-primary" onclick="plotMonth()">Month</button>
+                    <button class="btn btn-primary" onclick="plotWeek()">Week</button>
 
                 </div>
+                <div class="col-md-9" id="graphArea">
+                    <canvas id="myChart"  style=" height: 500px"></canvas>
+                </div>
             </div>
-            <div class="col-md-3">
-                <h3>Filter</h3>
-                <br> 
-                <button onclick="plotMonth()">Month</button>
-                <br>
-                <button onclick="plotWeek()">Week</button>
-
             </div>
-            <div class="col-md-9" id="graphArea">
-<!--                <div id="curve_chart" style="width: 900px; height: 500px"></div>-->
-                <canvas id="myChart"  style=" height: 500px"></canvas>
-            </div>
-            
         </div>
     </div>
 
