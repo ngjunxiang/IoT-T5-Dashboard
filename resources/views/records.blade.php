@@ -63,7 +63,7 @@
             { 
               data: 'numPeopleDetected', 
               render: function (data, type, row) { 
-                return '<a href=/sale/' + data + '>' + data + '</a>'; 
+                return data;
               }
             },
             { 
