@@ -21,7 +21,7 @@ class DashboardController extends Controller
     public function overview()
     {
         $liveImages = $this->getLiveImages();
-        $latest = end($liveImages);
+        $latest = $liveImages[0];
         $percentage = $this->predictHourly($liveImages);
         $data = ['latest' => $latest, 'percentage' => $percentage];
         if (Auth::user()->hasRole('manager')) {
