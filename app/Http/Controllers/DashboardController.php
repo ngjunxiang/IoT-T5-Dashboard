@@ -90,7 +90,7 @@ class DashboardController extends Controller
     public function getLiveImages()
     {
         $client = new Client();
-        $response = $client->get(env('API_HOST') . '/api/liveimage?limit=5000');
+        $response = $client->get(env('API_HOST') . '/api/liveimage?order=desc&limit=5000');
         if ($response->getStatusCode() === 200) {
             $decodedResponse = json_decode($response->getBody()->getContents(), true);
             if ($decodedResponse['success'] && $decodedResponse['status'] = 200) {
