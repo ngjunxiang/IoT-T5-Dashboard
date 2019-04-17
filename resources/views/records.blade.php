@@ -41,19 +41,23 @@
               data: 'created_at', 
               render: function (data, type, row) { 
                 var d = new Date(data);
-                var h = d.getHours();
-                if (h.toString().length == 1) {
-                  h+="0";
+                var hour = d.getHours();
+                if(hour.toString().length == 1) {
+                    hour = '0'+hour;
                 }
-                var m = d.getMinutes();
-                if (m.toString().length == 1) {
-                  m+="0";
+
+                var minute = d.getMinutes();
+                if(minute.toString().length == 1) {
+                    minute = '0'+minute;
                 }
-                var s = d.getMinutes();
-                if (s.toString().length == 1) {
-                  s+="0";
-                }
-                return tConvert(h + ":" + m + ":" + s, true); 
+
+                var second = d.getSeconds();
+                if(second.toString().length == 1) {
+                    second = '0'+second;
+                }   
+               
+              
+                return tConvert(hour + ":" + minute + ":" + second, true); 
               }
             },
             { 
